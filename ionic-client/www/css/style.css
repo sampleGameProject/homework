@@ -1,0 +1,115 @@
+/* Empty. Add your own CSS if you like */
+
+.left-container{
+    float: left;
+    height: 0px;
+    margin-right: 0px;
+    border-right:solid;
+    border-width:thin;
+}
+
+.left-title{
+    float: left;
+    width:140px;
+    margin-right: 0px;
+}
+
+.top-container {
+
+}
+
+.left-spacer{
+    width:140px;
+    height: 40px;
+
+}
+
+.bottom-container{
+    margin-top:47px;
+}
+
+.right-container{
+    margin-left:140px;
+
+    border-color:gray;
+    border-left:solid;
+    border-left-width:1px;
+}
+
+.groups-table {
+    float: left;
+    width: 200px;
+    height: 20px;
+    margin-right: 8px;
+    background-color: linen;
+}
+
+.hight-as-need {
+    white-space: nowrap;
+}
+
+.wide-as-needed {
+    /*overflow: scroll;*/
+    white-space: nowrap;
+}
+.scroll {
+    min-width: 100%;
+}
+
+.table-content {
+    padding:0px;
+}
+
+.header-scroll{
+    margin-left: 140px;
+    height:40px;
+}
+
+.table-row-name-item .table-row-item .table-header{
+    width:100px;
+    height:40px;
+    padding:0px;
+    margin:0px;
+}
+
+.table-header-item{
+    height:40px;
+    width:130px;
+    padding:0px;
+    margin:0px;
+}
+
+.table-row-name-item{
+    height:49px;
+    width:130px;
+    padding:0px;
+    margin:0px;
+}
+
+
+.table-row-name-item {
+
+    font-weight:bold;
+}
+
+.table-row-item {
+    height:49px;
+    width:130px;
+    padding:0px;
+    margin:0px;
+}
+
+.table-header {
+
+}
+
+.table-header-item {
+
+    font-weight:bold;
+}
+
+.header{
+    border-color:gray;
+    border-bottom:solid;
+    border-bottom-width:1px;
+}
