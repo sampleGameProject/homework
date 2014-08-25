@@ -1,0 +1,10 @@
+.main-menu{
+    width: 130px;
+    /*float:left;*/
+}
+
+.main-menu-content{
+    margin-left: 135px;
+    /*float:left;*/
+    width: 100%;
+}
