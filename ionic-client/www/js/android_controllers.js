@@ -13,22 +13,49 @@ angular.module('starter.controllers', [])
     };
 })
 
-.controller('LoadingController',function($state,AppData){
+.controller('LoadingController',function($state){
     console.log("test LoadingController");
 
     setTimeout(function(){
-        var sheetId = AppData.sheets[0].id;
-        $state.go('app.sheets', { sheetId: sheetId});
+        $state.go('main');
     }, 1000);
 })
 
-.controller('AppController', function($scope, AppData) {
+//.controller('AppController', function($scope, AppData) {
+//
+//
+//    console.log("test AppController");
+//})
+
+.controller('MainController', function ($scope, AppData) {
+
     $scope.sheets = AppData.sheets;
     $scope.subjects = AppData.subjects;
     $scope.profile = AppData.profile;
 
-    console.log("test AppController");
+    $scope.menuItems = [{
+        name : "Ведомости",
+        items : AppData.sheets,
+        link: "#/app/sheet/"
+    },  {
+        name : "Предметы",
+        items : AppData.subjects,
+        link: "#/app/subject/"
+    },  {
+        name : "Профиль",
+        items : [],
+        link: "#/app/profile/"
+    }];
+
+    $scope.activeItem = $scope.menuItems[0];
+
+    $scope.selectMenuItem = function(menuItem, index) {
+        $scope.activeItem = menuItem;
+    };
+
+    console.log("test MainController");
 })
+
 .controller('SheetController', function($scope, AppData, $stateParams,$ionicScrollDelegate) {
     console.log("test SheetController");
 

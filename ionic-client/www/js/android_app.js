@@ -28,18 +28,17 @@ angular.module('starter', ['ionic', 'starter.controllers'])
             controller: 'LoadingController'
         })
 
-        .state('app', {
-            url: "/app",
-            abstract: true,
+        .state('main', {
+            url: "/main",
             templateUrl: "templates/android/main.html",
-            controller: 'AppController'
+            controller: 'MainController'
         })
 
         .state('app.sheets', {
             url: "/sheets",
             templateUrl: "templates/profile.html",
             controller: 'SheetController'
-        })
+        });
 
 //        .state('app.sheet', {
 //            url: "/sheet/:sheetId",

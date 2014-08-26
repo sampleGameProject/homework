@@ -108,6 +108,8 @@ function Sheet(subject, groups, isLection) {
     this.labWorkCompletions = [];
 
     this.isLection = isLection;
+
+    this.name = this.getTitle();
 }
 
 Sheet.prototype.constructor = Sheet;
@@ -129,7 +131,7 @@ Sheet.prototype.addLesson = function (date) {
 }
 
 Sheet.prototype.getTitle = function () {
-    var title = this.subject.name + " " + (this.isLection ? "Лекция" : "Практика") + "( ";
+    var title = this.subject.name + " " + (this.isLection ? "Лекция" : "Практика") + " (";
     
     var groups = this.groups;
     var length = groups.length;

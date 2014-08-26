@@ -1,10 +1,19 @@
-.main-menu{
-    width: 130px;
-    /*float:left;*/
+@media (min-width: 767px) {
+    .menu-content {
+        -webkit-transform: translate3d(130px, 0px, 0px) !important;
+        width: calc(100% - 130px) !important;
+    }
+
+    .menu {
+        z-index: 2 !important;
+        box-shadow: -1px 0 2px rgba(0, 0, 0, .2), 1px 0 2px rgba(0, 0, 0, .2);
+    }
+
+    .bar-header button.ion-navicon {
+        display: none;
+    }
 }
 
-.main-menu-content{
-    margin-left: 135px;
-    /*float:left;*/
-    width: 100%;
+.main-content-item{
+    height: 64px;
 }

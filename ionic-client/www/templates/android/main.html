@@ -1,44 +1,45 @@
-<ion-view title="main">
+<ion-view>
 
+    <ion-header-bar align-title="left" class="bar-positive">
+        <button class="button icon-left ion-home button-clear">{{activeItem.name}}</button>
+    </ion-header-bar>
 
-    <div class="bar bar-header bar-calm">
-        <h1 class="title">bar-light</h1>
-    </div>
+    <ion-side-menus>
 
+        <ion-side-menu side="left" width="130">
+            <ion-view>
 
+                <ion-content>
+                    <ion-list>
 
-    <ion-content class="has-header" scroll="false">
+                        <ion-item ng-repeat="item in menuItems" ng-click="selectMenuItem(item, $index)"
+                                  ng-class="{active: activeItem == item}">
+                            {{item.name}}
+                        </ion-item>
 
-        <div class="main-menu">
-            <ion-list >
-                <ion-item> Профиль</ion-item>
-                <ion-item> Профиль</ion-item>
-                <ion-item> Профиль</ion-item>
-            </ion-list>
-        </div>
+                    </ion-list>
+                </ion-content>
 
-        <div class="main-menu-content">
-            <ion-list >
-                <ion-item>
-                    asdasdasd
-                </ion-item>
-                <ion-item>
-                    asdasdasd
-                </ion-item>
-                <ion-item>
-                    asdasdasd
-                </ion-item>
-                <ion-item>
-                    asdasdasd
-                </ion-item>
-            </ion-list>
-        </div>
+            </ion-view>
+        </ion-side-menu>
 
+        <ion-pane ion-side-menu-content>
 
+            <ion-view>
+                <ion-content>
+                    <ion-list>
 
+                        <ion-item ng-repeat="item in activeItem.items" href="{{activeItem.link}}{{item.id}}"
+                                class="main-content-item">
+                            {{item.name}}
+                        </ion-item>
 
+                    </ion-list>
+                </ion-content>
+            </ion-view>
 
+        </ion-pane>
 
+    </ion-side-menus>
 
-    </ion-content>
 </ion-view>
