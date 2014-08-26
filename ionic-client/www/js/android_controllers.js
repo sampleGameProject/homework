@@ -4,7 +4,7 @@
 
 angular.module('starter.controllers', [])
 
-.controller('LoginController',function($scope,$stateParams,$state){
+.controller('LoginController',function($scope,$state){
     console.log("test LoginController");
     $scope.loginData = {};
 
@@ -21,30 +21,25 @@ angular.module('starter.controllers', [])
     }, 1000);
 })
 
-//.controller('AppController', function($scope, AppData) {
-//
-//
-//    console.log("test AppController");
-//})
+.controller('AppController',function($state){
+    console.log("test AppController");
+})
+
 
 .controller('MainController', function ($scope, AppData) {
-
-    $scope.sheets = AppData.sheets;
-    $scope.subjects = AppData.subjects;
-    $scope.profile = AppData.profile;
 
     $scope.menuItems = [{
         name : "Ведомости",
         items : AppData.sheets,
-        link: "#/app/sheet/"
+        link: "#/sheet/"
     },  {
         name : "Предметы",
         items : AppData.subjects,
-        link: "#/app/subject/"
+        link: "#/subject/"
     },  {
         name : "Профиль",
         items : [],
-        link: "#/app/profile/"
+        link: "#/profile/"
     }];
 
     $scope.activeItem = $scope.menuItems[0];
@@ -56,8 +51,10 @@ angular.module('starter.controllers', [])
     console.log("test MainController");
 })
 
-.controller('SheetController', function($scope, AppData, $stateParams,$ionicScrollDelegate) {
+.controller('SheetController', function($scope,AppData, $stateParams,$ionicScrollDelegate,$ionicNavBarDelegate) {
     console.log("test SheetController");
+
+    $scope.sheets = AppData.sheets;
 
     $scope.selectedItem = null;
     for(var i = 0; i < $scope.sheets.length; i++){
@@ -83,6 +80,10 @@ angular.module('starter.controllers', [])
     };
 
     $scope.selectOptions = visits;
+
+    $scope.goBack = function() {
+        $ionicNavBarDelegate.back();
+    };
 })
 
 .controller('SubjectController',function($scope, AppData, $stateParams){

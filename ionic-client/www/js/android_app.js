@@ -30,13 +30,13 @@ angular.module('starter', ['ionic', 'starter.controllers'])
 
         .state('main', {
             url: "/main",
-            templateUrl: "templates/android/main.html",
+            templateUrl: "templates/android/app_main.html",
             controller: 'MainController'
         })
 
-        .state('app.sheets', {
-            url: "/sheets",
-            templateUrl: "templates/profile.html",
+        .state('sheet', {
+            url: "/sheet/:sheetId",
+            templateUrl: "templates/sheet.html",
             controller: 'SheetController'
         });
 
