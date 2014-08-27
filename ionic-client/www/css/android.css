@@ -12,30 +12,6 @@
     .bar-header button.ion-navicon {
         display: none;
     }
-
-    table.tableSection {
-        display: table;
-        width: 100%;
-        height: 100%;
-    }
-    table.tableSection thead, table.tableSection tbody {
-        float: left;
-        width: 100%;
-    }
-    /*table.tableSection tbody {*/
-        /*overflow: auto;*/
-        /**/
-    /*}*/
-    table.tableSection tr {
-        width: 100%;
-        display: table;
-        text-align: left;
-    }
-    table.tableSection th, table.tableSection td {
-        width: 33%;
-    }
-
-
 }
 
 .main-content-item{

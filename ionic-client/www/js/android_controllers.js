@@ -26,7 +26,9 @@ angular.module('starter.controllers', [])
 })
 
 
-.controller('MainController', function ($scope, AppData) {
+.controller('MainController', function ($scope, AppData,$ionicViewService) {
+
+    $ionicViewService.clearHistory();
 
     $scope.menuItems = [{
         name : "Ведомости",
@@ -84,6 +86,26 @@ angular.module('starter.controllers', [])
     $scope.goBack = function() {
         $ionicNavBarDelegate.back();
     };
+
+    setTimeout(function(){
+        $('#fixed_hdr1').fxdHdrCol({
+            fixedCols: 1,
+            width:     "100%",
+            height:    400,
+            colModal: [
+                { width: 50, align: 'center' },
+                { width: 110, align: 'center' },
+                { width: 170, align: 'left' },
+                { width: 250, align: 'left' },
+                { width: 100, align: 'left' },
+                { width: 70, align: 'left' },
+                { width: 100, align: 'left' },
+                { width: 100, align: 'center' },
+                { width: 90, align: 'left' },
+                { width: 400, align: 'left' }
+            ]
+        });
+    },400);
 })
 
 .controller('SubjectController',function($scope, AppData, $stateParams){
