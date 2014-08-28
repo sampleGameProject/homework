@@ -53,59 +53,68 @@ angular.module('starter.controllers', [])
     console.log("test MainController");
 })
 
-.controller('SheetController', function($scope,AppData, $stateParams,$ionicScrollDelegate,$ionicNavBarDelegate) {
+.controller('SheetController', function($scope,AppData, $stateParams,$ionicNavBarDelegate) {
     console.log("test SheetController");
 
     $scope.sheets = AppData.sheets;
 
-    $scope.selectedItem = null;
     for(var i = 0; i < $scope.sheets.length; i++){
         var current = $scope.sheets[i];
 
         if(current.id == $stateParams.sheetId){
-            $scope.selectedItem = current;
-            $scope.activeDataSource = new SheetTableDataSource(current);
+            $scope.groups = current.groups;
+            $scope.dataSource = new SheetTableDataSource(current);
+            $scope.activeSection = $scope.dataSource.getGroupTableSection($scope.groups[0]);
             break;
         }
     }
 
-    $scope.gotScrolledHeader = function () {
-        //var scrollPos = $ionicScrollDelegate.$getByHandle("header").getScrollPosition();
-        //$ionicScrollDelegate.$getByHandle("content").scrollTo(scrollPos.left, 0, false);
-    };
-
-
-    $scope.gotScrolledContent = function () {
-
-        var scrollPos = $ionicScrollDelegate.$getByHandle("content").getScrollPosition();
-        $ionicScrollDelegate.$getByHandle("header").scrollTo(scrollPos.left, 0, false);
-    };
+//    $scope.activeGroupChange = function(group) {
+//
+//    };
+//
+//    $scope.selectGroupSection = function(group){
+//        $scope.activeGroup = group;
+//        $scope.activeSection = $scope.dataSource.getGroupTableSection($scope.activeGroup);
+//        $scope.toggleSpinner();
+//        $scope.updateTable();
+//    };
+//
+//    $scope.selectGroupSection($scope.groups[0]);
 
     $scope.selectOptions = visits;
 
     $scope.goBack = function() {
         $ionicNavBarDelegate.back();
     };
+//
+//    $scope.updateTable = function(){
+//        var colModal = [];
+//        colModal.push({width: 120, align: 'left'});//first column
+//
+//        for(var i = 0; i < $scope.dataSource.headers.length; i++){
+//            colModal.push({ width: 100, align: 'center' });//other columns
+//        }
+//
+//        $('#fixed_hdr1').fxdHdrCol({
+//            fixedCols: 1,
+//            width:     "100%",
+//            height:    "100%",
+//            colModal: colModal
+//        });
+//    };
 
-    setTimeout(function(){
-        $('#fixed_hdr1').fxdHdrCol({
-            fixedCols: 1,
-            width:     "100%",
-            height:    400,
-            colModal: [
-                { width: 50, align: 'center' },
-                { width: 110, align: 'center' },
-                { width: 170, align: 'left' },
-                { width: 250, align: 'left' },
-                { width: 100, align: 'left' },
-                { width: 70, align: 'left' },
-                { width: 100, align: 'left' },
-                { width: 100, align: 'center' },
-                { width: 90, align: 'left' },
-                { width: 400, align: 'left' }
-            ]
-        });
-    },400);
+
+
+    $scope.showSpinner = false;
+
+    $scope.toggleSpinner = function(){
+        $scope.showSpinner = !$scope.showSpinner;
+    };
+
+//    setTimeout(function(){
+//        $scope.updateTable();
+//    },100);
 })
 
 .controller('SubjectController',function($scope, AppData, $stateParams){

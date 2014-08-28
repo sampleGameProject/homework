@@ -185,7 +185,7 @@ with this program. If not, see <http://www.gnu.org/licenses/>.
 
 			lc.ft_r
 				.parent()
-				.css({width: lc.ft_wrapper.width()- 17});
+				.css({width: lc.ft_wrapper.width()});
 			
 			//events (scroll and resize)
 			lc.ft_wrapper.scroll(function () {

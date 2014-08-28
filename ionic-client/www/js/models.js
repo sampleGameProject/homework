@@ -10,8 +10,11 @@ function Group(name, students) {
     this.name = name;
     this.students = students;
 
+    var counter = 1;
+
     for (var i = 0; i < students.length; i++) {
         students[i].group = name;
+        students[i].num = counter++;
     }
 }
 
@@ -225,9 +228,31 @@ function createDemo() {
         new Student("Дубинин"),
         new Student("Кочетков"),
         new Student("Осипов"),
+        new Student("Баранов"),
+        new Student("Герасин"),
+        new Student("Дубинин"),
+        new Student("Кочетков"),
+        new Student("Осипов"),
+        new Student("Баранов"),
+        new Student("Герасин"),
+        new Student("Дубинин"),
+        new Student("Кочетков"),
+        new Student("Осипов"),
         new Student("Собко")]);
 
     var group10po1 = new Group("10ПО1", [
+        new Student("Акимушкин"),
+        new Student("Казаков"),
+        new Student("Евдокимов"),
+        new Student("Ковалев"),
+        new Student("Акимушкин"),
+        new Student("Казаков"),
+        new Student("Евдокимов"),
+        new Student("Ковалев"),
+        new Student("Акимушкин"),
+        new Student("Казаков"),
+        new Student("Евдокимов"),
+        new Student("Ковалев"),
         new Student("Акимушкин"),
         new Student("Казаков"),
         new Student("Евдокимов"),
@@ -242,6 +267,9 @@ function createDemo() {
     sheet1.addLesson(new Date("October 24, 2014 11:15:00"));
     sheet1.addLesson(new Date("October 26, 2014 11:15:00"));
     sheet1.addLesson(new Date("October 28, 2014 11:15:00"));
+    sheet1.addLesson(new Date("October 29, 2014 11:15:00"));
+    sheet1.addLesson(new Date("October 30, 2014 11:15:00"));
+    sheet1.addLesson(new Date("October 31, 2014 11:15:00"));
 
 
     var sheet2 = new Sheet(subject1, [group10po1], false);
@@ -285,16 +313,21 @@ function SheetTableDataSource(sheet) {
 
     this.title = sheet.getTitle();
     this.headers = [];
-    this.sections = [];
     this.sheet = sheet;
 
     var lessonsCount = sheet.lessons.length;
+
+    this.columnsCount = lessonsCount + 1;
+
+    this.headers.push("Группа \ Дата");
 
     for (var i = 0; i < lessonsCount; i++) {
         var date = sheet.lessons[i].date;
         var newdate = date.getDate() + '.' + (date.getMonth() + 1) + '.' + date.getFullYear();
         this.headers.push(newdate);
     }
+
+    this.groupSections = [];
 
     var groupsCount = sheet.groups.length;
 
@@ -306,15 +339,34 @@ function SheetTableDataSource(sheet) {
         for (var j = 0; j < currentGroup.students.length; j++) {
             var curStudent = currentGroup.students[j];
             var newRow = new Row();
-            newRow.title = curStudent.name;
+
+            newRow.title = curStudent.num + ". " + curStudent.name;
 
             var visits = sheet.getStudentVisits(curStudent);
             newRow.items = visits;
             newSection.rows.push(newRow);
         }
 
-        this.sections.push(newSection);
+        this.groupSections.push({
+            group: currentGroup,
+            section: newSection
+        });
+
     }
+}
+
+SheetTableDataSource.prototype.constructor = SheetTableDataSource;
+
+SheetTableDataSource.prototype.getGroupTableSection = function(group){
+    for(var i = 0; i < this.groupSections.length; i++){
+
+        var currentSection = this.groupSections[i];
+
+        if(currentSection.group == group)
+            return currentSection.section;
+    }
+
+    return null;
 }
 
 
