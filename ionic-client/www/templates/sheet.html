@@ -40,21 +40,20 @@
 
 
         <div class="header">
-            <div class="table-date-item">Дата</div>
+            <div class="table-date-item">{{header.title}}</div>
             <ion-scroll direction="x" class="wide-as-needed header-scroll" delegate-handle="header">
-                <button class="table-header-item" ng-repeat="header in dataSource.headers">{{header}}</button>
+                <button class="table-header-item" ng-repeat="header in dataSource.header.items">{{header}}</button>
             </ion-scroll>
         </div>
 
         <ion-content class="bottom-container">
             <ion-list>
                 <ion-item class="table-content">
-                    <div class="left-container">
 
+                    <div class="left-container">
                         <div ng-repeat="row in activeSection.rows" class="table-row-name-item">
                             <span class="table-row-name-item">{{row.title}}</span>
                         </div>
-
                     </div>
 
                     <ion-scroll direction="x" class="wide-as-needed right-container"
@@ -64,9 +63,10 @@
                             <div ng-repeat="row in activeSection.rows" class="table-row-item">
 
                                 <select class="table-row-item"
-                                ng-repeat="item in row.items"
-                                ng-model="item.visit"
-                                ng-options="visit for visit in selectOptions"></select>
+                                    ng-repeat="item in row.items"
+                                    ng-model="item.visit"
+                                    ng-options="visit for visit in selectOptions"></select>
+
                             </div>
 
                     </ion-scroll>
@@ -80,7 +80,7 @@
     <ion-footer-bar>
         <div>Дата</div>
         <ion-scroll direction="x" class="wide-as-needed header-scroll" delegate-handle="header">
-            <button class="table-header-item" ng-repeat="header in dataSource.headers">{{header}}</button>
+            <button class="table-header-item" ng-repeat="header in dataSource.header">{{header}}</button>
         </ion-scroll>
     </ion-footer-bar>
 </ion-view>

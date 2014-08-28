@@ -3211,7 +3211,7 @@ ionic.DomUtil.ready(function(){
  * that has a Scroll View.
  *
  * It will also attempt to prevent the native overflow scrolling on focus,
- * which can cause layout issues such as pushing headers up and out of view.
+ * which can cause layout issues such as pushing header up and out of view.
  *
  * The keyboard fixes work best in conjunction with the 
  * [Ionic Keyboard Plugin](https://github.com/driftyco/ionic-plugins-keyboard),
@@ -15113,10 +15113,10 @@ function $ExceptionHandlerProvider() {
 }
 
 /**
- * Parse headers into key value object
+ * Parse header into key value object
  *
- * @param {string} headers Raw headers as a string
- * @returns {Object} Parsed headers as key value object
+ * @param {string} headers Raw header as a string
+ * @returns {Object} Parsed header as key value object
  */
 function parseHeaders(headers) {
   var parsed = {}, key, val, i;
@@ -15142,7 +15142,7 @@ function parseHeaders(headers) {
 
 
 /**
- * Returns a function that provides access to parsed headers.
+ * Returns a function that provides access to parsed header.
  *
  * Headers are lazy parsed when first requested.
  * @see parseHeaders
@@ -15151,7 +15151,7 @@ function parseHeaders(headers) {
  * @returns {function(string=)} Returns a getter function which if called with:
  *
  *   - if called with single an argument returns a single header value or null
- *   - if called with no arguments returns an object containing all headers.
+ *   - if called with no arguments returns an object containing all header.
  */
 function headersGetter(headers) {
   var headersObj = isObject(headers) ? headers : undefined;
@@ -15174,7 +15174,7 @@ function headersGetter(headers) {
  * This function is used for both request and response transforming
  *
  * @param {*} data Data to transform.
- * @param {function(string=)} headers Http headers getter fn.
+ * @param {function(string=)} headers Http header getter fn.
  * @param {(Function|Array.<Function>)} fns Function or an array of functions.
  * @returns {*} Transformed data.
  */
@@ -15218,7 +15218,7 @@ function $HttpProvider() {
       return isObject(d) && !isFile(d) && !isBlob(d) ? toJson(d) : d;
     }],
 
-    // default headers
+    // default header
     headers: {
       common: {
         'Accept': 'application/json, text/plain, */*'
@@ -15315,11 +15315,11 @@ function $HttpProvider() {
      *
      * ```js
      *   $http({method: 'GET', url: '/someUrl'}).
-     *     success(function(data, status, headers, config) {
+     *     success(function(data, status, header, config) {
      *       // this callback will be called asynchronously
      *       // when the response is available
      *     }).
-     *     error(function(data, status, headers, config) {
+     *     error(function(data, status, header, config) {
      *       // called asynchronously if an error occurs
      *       // or server returns response with an error status.
      *     });
@@ -15368,32 +15368,32 @@ function $HttpProvider() {
      *
      * # Setting HTTP Headers
      *
-     * The $http service will automatically add certain HTTP headers to all requests. These defaults
-     * can be fully configured by accessing the `$httpProvider.defaults.headers` configuration
+     * The $http service will automatically add certain HTTP header to all requests. These defaults
+     * can be fully configured by accessing the `$httpProvider.defaults.header` configuration
      * object, which currently contains this default configuration:
      *
-     * - `$httpProvider.defaults.headers.common` (headers that are common for all requests):
+     * - `$httpProvider.defaults.header.common` (header that are common for all requests):
      *   - `Accept: application/json, text/plain, * / *`
-     * - `$httpProvider.defaults.headers.post`: (header defaults for POST requests)
+     * - `$httpProvider.defaults.header.post`: (header defaults for POST requests)
      *   - `Content-Type: application/json`
-     * - `$httpProvider.defaults.headers.put` (header defaults for PUT requests)
+     * - `$httpProvider.defaults.header.put` (header defaults for PUT requests)
      *   - `Content-Type: application/json`
      *
      * To add or overwrite these defaults, simply add or remove a property from these configuration
-     * objects. To add headers for an HTTP method other than POST or PUT, simply add a new object
+     * objects. To add header for an HTTP method other than POST or PUT, simply add a new object
      * with the lowercased HTTP method name as the key, e.g.
-     * `$httpProvider.defaults.headers.get = { 'My-Header' : 'value' }.
+     * `$httpProvider.defaults.header.get = { 'My-Header' : 'value' }.
      *
      * The defaults can also be set at runtime via the `$http.defaults` object in the same
      * fashion. For example:
      *
      * ```
      * module.run(function($http) {
-     *   $http.defaults.headers.common.Authorization = 'Basic YmVlcDpib29w'
+     *   $http.defaults.header.common.Authorization = 'Basic YmVlcDpib29w'
      * });
      * ```
      *
-     * In addition, you can supply a `headers` property in the config object passed when
+     * In addition, you can supply a `header` property in the config object passed when
      * calling `$http(config)`, which overrides the defaults without changing them globally.
      *
      *
@@ -15631,7 +15631,7 @@ function $HttpProvider() {
      * authentication cookie with a [salt](https://en.wikipedia.org/wiki/Salt_(cryptography))
      * for added security.
      *
-     * The name of the headers can be specified using the xsrfHeaderName and xsrfCookieName
+     * The name of the header can be specified using the xsrfHeaderName and xsrfCookieName
      * properties of either $httpProvider.defaults at config-time, $http.defaults at run-time,
      * or the per-request config object.
      *
@@ -15645,19 +15645,19 @@ function $HttpProvider() {
      *      to `?key1=value1&key2=value2` after the url. If the value is not a string, it will be
      *      JSONified.
      *    - **data** – `{string|Object}` – Data to be sent as the request message data.
-     *    - **headers** – `{Object}` – Map of strings or functions which return strings representing
-     *      HTTP headers to send to the server. If the return value of a function is null, the
+     *    - **header** – `{Object}` – Map of strings or functions which return strings representing
+     *      HTTP header to send to the server. If the return value of a function is null, the
      *      header will not be sent.
      *    - **xsrfHeaderName** – `{string}` – Name of HTTP header to populate with the XSRF token.
      *    - **xsrfCookieName** – `{string}` – Name of cookie containing the XSRF token.
      *    - **transformRequest** –
      *      `{function(data, headersGetter)|Array.<function(data, headersGetter)>}` –
      *      transform function or an array of such functions. The transform function takes the http
-     *      request body and headers and returns its transformed (typically serialized) version.
+     *      request body and header and returns its transformed (typically serialized) version.
      *    - **transformResponse** –
      *      `{function(data, headersGetter)|Array.<function(data, headersGetter)>}` –
      *      transform function or an array of such functions. The transform function takes the http
-     *      response body and headers and returns its transformed (typically deserialized) version.
+     *      response body and header and returns its transformed (typically deserialized) version.
      *    - **cache** – `{boolean|Cache}` – If true, a default $http cache will be used to cache the
      *      GET request, otherwise if a cache instance built with
      *      {@link ng.$cacheFactory $cacheFactory}, this cache will be used for
@@ -15681,7 +15681,7 @@ function $HttpProvider() {
      *   - **data** – `{string|Object}` – The response body transformed with the transform
      *     functions.
      *   - **status** – `{number}` – HTTP status code of the response.
-     *   - **headers** – `{function([headerName])}` – Header getter function.
+     *   - **header** – `{function([headerName])}` – Header getter function.
      *   - **config** – `{Object}` – The configuration object that was used to generate the request.
      *   - **statusText** – `{string}` – HTTP status text of the response.
      *
@@ -15783,7 +15783,7 @@ function $HttpProvider() {
       var headers = mergeHeaders(requestConfig);
 
       extend(config, requestConfig);
-      config.headers = headers;
+      config.header = headers;
       config.method = uppercase(config.method);
 
       var xsrfValue = urlIsSameOrigin(config.url)
@@ -15795,7 +15795,7 @@ function $HttpProvider() {
 
 
       var serverRequest = function(config) {
-        headers = config.headers;
+        headers = config.header;
         var reqData = transformData(config.data, headersGetter(headers), config.transformRequest);
 
         // strip content-type if data is undefined
@@ -15837,14 +15837,14 @@ function $HttpProvider() {
 
       promise.success = function(fn) {
         promise.then(function(response) {
-          fn(response.data, response.status, response.headers, config);
+          fn(response.data, response.status, response.header, config);
         });
         return promise;
       };
 
       promise.error = function(fn) {
         promise.then(null, function(response) {
-          fn(response.data, response.status, response.headers, config);
+          fn(response.data, response.status, response.header, config);
         });
         return promise;
       };
@@ -15854,7 +15854,7 @@ function $HttpProvider() {
       function transformResponse(response) {
         // make a copy since the response must be cacheable
         var resp = extend({}, response, {
-          data: transformData(response.data, response.headers, config.transformResponse)
+          data: transformData(response.data, response.header, config.transformResponse)
         });
         return (isSuccess(response.status))
           ? resp
@@ -15862,8 +15862,8 @@ function $HttpProvider() {
       }
 
       function mergeHeaders(config) {
-        var defHeaders = defaults.headers,
-            reqHeaders = extend({}, config.headers),
+        var defHeaders = defaults.header,
+            reqHeaders = extend({}, config.header),
             defHeaderName, lowercaseDefHeaderName, reqHeaderName;
 
         defHeaders = extend({}, defHeaders.common, defHeaders[lowercase(config.method)]);
@@ -15990,7 +15990,7 @@ function $HttpProvider() {
          *
          * @description
          * Runtime equivalent of the `$httpProvider.defaults` property. Allows configuration of
-         * default headers, withCredentials as well as request and response transformations.
+         * default header, withCredentials as well as request and response transformations.
          *
          * See "Setting HTTP Headers" and "Transforming Requests and Responses" sections above.
          */
@@ -31397,7 +31397,7 @@ var validElements = angular.extend({},
 var uriAttrs = makeMap("background,cite,href,longdesc,src,usemap");
 var validAttrs = angular.extend({}, uriAttrs, makeMap(
     'abbr,align,alt,axis,bgcolor,border,cellpadding,cellspacing,class,clear,'+
-    'color,cols,colspan,compact,coords,dir,face,headers,height,hreflang,hspace,'+
+    'color,cols,colspan,compact,coords,dir,face,header,height,hreflang,hspace,'+
     'ismap,lang,language,nohref,nowrap,rel,rev,rows,rowspan,rules,'+
     'scope,scrolling,shape,size,span,start,summary,target,title,type,'+
     'valign,value,vspace,width'));

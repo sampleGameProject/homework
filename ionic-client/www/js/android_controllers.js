@@ -87,24 +87,6 @@ angular.module('starter.controllers', [])
     $scope.goBack = function() {
         $ionicNavBarDelegate.back();
     };
-//
-//    $scope.updateTable = function(){
-//        var colModal = [];
-//        colModal.push({width: 120, align: 'left'});//first column
-//
-//        for(var i = 0; i < $scope.dataSource.headers.length; i++){
-//            colModal.push({ width: 100, align: 'center' });//other columns
-//        }
-//
-//        $('#fixed_hdr1').fxdHdrCol({
-//            fixedCols: 1,
-//            width:     "100%",
-//            height:    "100%",
-//            colModal: colModal
-//        });
-//    };
-
-
 
     $scope.showSpinner = false;
 
@@ -112,9 +94,6 @@ angular.module('starter.controllers', [])
         $scope.showSpinner = !$scope.showSpinner;
     };
 
-//    setTimeout(function(){
-//        $scope.updateTable();
-//    },100);
 })
 
 .controller('SubjectController',function($scope, AppData, $stateParams){
