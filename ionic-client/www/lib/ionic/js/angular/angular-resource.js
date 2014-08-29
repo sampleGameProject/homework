@@ -106,8 +106,8 @@ function shallowClearAndCopy(src, dst) {
  *   the default set of resource actions. The declaration should be created in the format of {@link
  *   ng.$http#usage_parameters $http.config}:
  *
- *       {action1: {method:?, params:?, isArray:?, header:?, ...},
- *        action2: {method:?, params:?, isArray:?, header:?, ...},
+ *       {action1: {method:?, params:?, isArray:?, headers:?, ...},
+ *        action2: {method:?, params:?, isArray:?, headers:?, ...},
  *        ...}
  *
  *   Where:
@@ -126,11 +126,11 @@ function shallowClearAndCopy(src, dst) {
  *   - **`transformRequest`** –
  *     `{function(data, headersGetter)|Array.<function(data, headersGetter)>}` –
  *     transform function or an array of such functions. The transform function takes the http
- *     request body and header and returns its transformed (typically serialized) version.
+ *     request body and headers and returns its transformed (typically serialized) version.
  *   - **`transformResponse`** –
  *     `{function(data, headersGetter)|Array.<function(data, headersGetter)>}` –
  *     transform function or an array of such functions. The transform function takes the http
- *     response body and header and returns its transformed (typically deserialized) version.
+ *     response body and headers and returns its transformed (typically deserialized) version.
  *   - **`cache`** – `{boolean|Cache}` – If true, a default $http cache will be used to cache the
  *     GET request, otherwise if a cache instance built with
  *     {@link ng.$cacheFactory $cacheFactory}, this cache will be used for
@@ -254,7 +254,7 @@ function shallowClearAndCopy(src, dst) {
  * for each action in the definition.
  *
  * Calling these methods invoke `$http` on the `url` template with the given `method`, `params` and
- * `header`.
+ * `headers`.
  * When the data is returned from the server then the object is an instance of the resource type and
  * all of the non-GET methods are available with `$` prefix. This allows you to easily support CRUD
  * operations (create, read, update, delete) on server-side data.
@@ -269,7 +269,7 @@ function shallowClearAndCopy(src, dst) {
  *
  * It's worth noting that the success callback for `get`, `query` and other methods gets passed
  * in the response that came from the server as well as $http header getter function, so one
- * could rewrite the above example and get access to http header as:
+ * could rewrite the above example and get access to http headers as:
  *
    ```js
      var User = $resource('/user/:userId', {userId:'@id'});
@@ -567,7 +567,7 @@ angular.module('ngResource', ['ng']).
           promise = promise.then(
               function(response) {
                 var value = responseInterceptor(response);
-                (success||noop)(value, response.header);
+                (success||noop)(value, response.headers);
                 return value;
               },
               responseErrorInterceptor);

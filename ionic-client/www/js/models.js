@@ -311,47 +311,47 @@ var counter = 1;
 
 function SheetTableDataSource(sheet) {
 
-//    this.title = sheet.getTitle();
-//    this.sheet = sheet;
-//
-//    var lessonsCount = sheet.lessons.length;
-//
-//    this.columnsCount = lessonsCount + 1;
-//
-//    this.header = new Row("Группа \ Дата");
-//
-//    for (var i = 0; i < lessonsCount; i++) {
-//        var date = sheet.lessons[i].date;
-//        var newdate = date.getDate() + '.' + (date.getMonth() + 1) + '.' + date.getFullYear();
-//        this.header.items.push(newdate);
-//    }
-//
-//    this.groupSections = [];
-//
-//    var groupsCount = sheet.groups.length;
+    this.title = sheet.getTitle();
+    this.sheet = sheet;
 
-//    for (var i = 0; i < groupsCount; i++) {
-//
-//        var currentGroup = sheet.groups[i];
-//        var newSection = new Section(currentGroup.name);
-//
-//        for (var j = 0; j < currentGroup.students.length; j++) {
-//            var curStudent = currentGroup.students[j];
-//
-//            var title = curStudent.num + ". " + curStudent.name;
-//
-//            var newRow = new Row(title);
-//
-//            newRow.items = sheet.getStudentVisits(curStudent);
-//            newSection.rows.push(newRow);
-//        }
-//
-//        this.groupSections.push({
-//            group: currentGroup,
-//            section: newSection
-//        });
-//
-//    }
+    var lessonsCount = sheet.lessons.length;
+
+    this.columnsCount = lessonsCount + 1;
+
+    this.header = new Row("Группа \ Дата");
+
+    for (var i = 0; i < lessonsCount; i++) {
+        var date = sheet.lessons[i].date;
+        var newdate = date.getDate() + '.' + (date.getMonth() + 1) + '.' + date.getFullYear();
+        this.header.items.push(newdate);
+    }
+
+    this.groupSections = [];
+
+    var groupsCount = sheet.groups.length;
+
+    for (var i = 0; i < groupsCount; i++) {
+
+        var currentGroup = sheet.groups[i];
+        var newSection = new Section(currentGroup.name);
+
+        for (var j = 0; j < currentGroup.students.length; j++) {
+            var curStudent = currentGroup.students[j];
+
+            var title = curStudent.num + ". " + curStudent.name;
+
+            var newRow = new Row(title);
+
+            newRow.items = sheet.getStudentVisits(curStudent);
+            newSection.rows.push(newRow);
+        }
+
+        this.groupSections.push({
+            group: currentGroup,
+            section: newSection
+        });
+
+    }
 }
 
 SheetTableDataSource.prototype.constructor = SheetTableDataSource;

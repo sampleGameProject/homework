@@ -3204,7 +3204,7 @@ ionic.DomUtil.ready(function(){
  * that has a Scroll View.
  *
  * It will also attempt to prevent the native overflow scrolling on focus,
- * which can cause layout issues such as pushing header up and out of view.
+ * which can cause layout issues such as pushing headers up and out of view.
  *
  * The keyboard fixes work best in conjunction with the 
  * [Ionic Keyboard Plugin](https://github.com/driftyco/ionic-plugins-keyboard),

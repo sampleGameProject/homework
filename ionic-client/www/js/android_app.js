@@ -10,6 +10,8 @@ angular.module('starter', ['ionic', 'starter.controllers'])
     this.sheets = demo.sheets;
     this.subjects = demo.subjects;
     this.profile = demo.profile;
+
+    console.log("init AppData");
 })
 
 
