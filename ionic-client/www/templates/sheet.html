@@ -9,78 +9,89 @@
             <i class="ion-clipboard custom-icon"></i>
 
             <a class="header-title button button-clear" ng-click="toggleSpinner()">
-                <!--{{activeDataSource.title}}-->
-                Title
+                {{dataSource.title}}
+                {{dataSource.activeSection.title}}
                 <i class="ion-android-dropdown"> </i>
             </a>
 
         </div>
 
-        <h1 class="title "></h1>
+        <h1 class="title"></h1>
 
         <div class="buttons">
-            <button class="button  button-clear right-bar-button ">
+            <button class="button  button-clear right-bar-button" ng-click="addLesson()">
                 <i class="ion-android-add right-bar-icon"></i>
             </button>
         </div>
 
     </ion-nav-bar>
 
+    <div class="animate-show spinner-content list" ng-show="showSpinner">
+        <ion-radio ng-repeat="section in dataSource.sections"
+                   ng-value="section"
+                   ng-model="dataSource.activeSection"
+                   ng-change="toggleSpinner()"
+                   name="section-side">
+            {{ section.title }}
+        </ion-radio>
+    </div>
 
-    <!--<div class="animate-show spinner-content list" ng-show="showSpinner">-->
-        <!--<ion-radio ng-repeat="group in groups"-->
-                   <!--ng-value="group.name"-->
-                   <!--ng-change="activeGroupChange(group)"-->
-                   <!--name="active-group">-->
-            <!--{{ item.text }}-->
-        <!--</ion-radio>-->
-    <!--</div>-->
+    <ion-header-bar class="bar-subheader no-padding">
+        <div class="table-header-footer-title">{{dataSource.headerTitle}}</div>
+        <ion-scroll direction="x" class="wide-as-needed header-scroll" delegate-handle="header"
+                    scrollbar-x ="false">
+            <button class="button table-header-item" ng-repeat="lesson in dataSource.lessons">{{lesson.getDateString()}}</button>
+        </ion-scroll>
+    </ion-header-bar>
 
-    <ion-content scroll="false">
+    <ion-content class="no-padding">
+        <ion-list class="no-padding">
+            <ion-item class="no-padding">
 
-
-        <div class="header">
-            <div class="table-date-item">{{dataSource.header.title}}</div>
-            <ion-scroll direction="x" class="wide-as-needed header-scroll" delegate-handle="header">
-                <button class="table-header-item" ng-repeat="header in dataSource.header.items">{{header}}</button>
-            </ion-scroll>
-        </div>
-
-        <ion-content class="bottom-container">
-            <ion-list>
-                <ion-item class="table-content">
-
-                    <div class="left-container">
-                        <div ng-repeat="row in activeSection.rows" class="table-row-name-item">
-                            <span class="table-row-name-item">{{row.title}}</span>
-                        </div>
+                <div class="left-container">
+                    <div ng-repeat="row in dataSource.activeSection.rows" class="table-row-name-item">
+                        <span class="table-row-name-item">{{row.title}}</span>
                     </div>
+                </div>
 
-                    <ion-scroll direction="x" class="wide-as-needed right-container"
-                            delegate-handle="content" on-scroll="gotScrolledContent()">
+                <ion-scroll direction="x" class="wide-as-needed right-container"
+                        delegate-handle="table" on-scroll="onScrollTable()">
 
+                        <div ng-repeat="row in dataSource.activeSection.rows" class="table-row-item">
 
-                            <div ng-repeat="row in activeSection.rows" class="table-row-item">
+                            <select class="table-row-item"
+                                ng-repeat="item in row.items"
+                                ng-model="item.visit"
+                                ng-options="visit for visit in selectOptions"></select>
 
-                                <select class="table-row-item"
-                                    ng-repeat="item in row.items"
-                                    ng-model="item.visit"
-                                    ng-options="visit for visit in selectOptions"></select>
+                        </div>
 
-                            </div>
+                </ion-scroll>
 
-                    </ion-scroll>
-
-                </ion-item>
-            </ion-list>
-
-        </ion-content>
+            </ion-item>
+        </ion-list>
     </ion-content>
 
-    <ion-footer-bar>
-        <div>Дата</div>
-        <ion-scroll direction="x" class="wide-as-needed header-scroll" delegate-handle="header">
-            <button class="table-header-item" ng-repeat="header in dataSource.header">{{header}}</button>
+    <ion-footer-bar class="no-padding">
+        <div class="table-header-footer-title">{{dataSource.footerTitle}}</div>
+        <ion-scroll direction="x" class="wide-as-needed footer-scroll" delegate-handle="footer"
+                    scrollbar-x ="false">
+            <button class="button table-header-item" ng-repeat="lesson in dataSource.lessons" ng-model="lesson">{{lesson.note}}</button>
         </ion-scroll>
     </ion-footer-bar>
 </ion-view>
+
+<script id="my-modal.html" type="text/ng-template">
+    <ion-modal-view>
+        <ion-header-bar class="bar-positive" align-title="left">
+            <h1 class="title">Добавить занятие</h1>
+        </ion-header-bar>
+        <ion-content>
+            Hello!
+            <label class="item item-input">
+                <span class="input-label">Date</span>
+                <input type="date">
+            </label>
+        </ion-content>
+    </ion-modal-view>
+</script>

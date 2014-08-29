@@ -53,7 +53,8 @@ angular.module('starter.controllers', [])
     console.log("test MainController");
 })
 
-.controller('SheetController', function($scope,AppData, $stateParams,$ionicNavBarDelegate) {
+.controller('SheetController', function($scope,AppData, $stateParams,
+    $ionicNavBarDelegate, $ionicScrollDelegate,$ionicModal) {
     console.log("test SheetController");
 
     $scope.sheets = AppData.sheets;
@@ -62,25 +63,14 @@ angular.module('starter.controllers', [])
         var current = $scope.sheets[i];
 
         if(current.id == $stateParams.sheetId){
-            $scope.groups = current.groups;
             $scope.dataSource = new SheetTableDataSource(current);
-            $scope.activeSection = $scope.dataSource.getGroupTableSection($scope.groups[0]);
             break;
         }
     }
 
-//    $scope.activeGroupChange = function(group) {
-//
-//    };
-//
-//    $scope.selectGroupSection = function(group){
-//        $scope.activeGroup = group;
-//        $scope.activeSection = $scope.dataSource.getGroupTableSection($scope.activeGroup);
-//        $scope.toggleSpinner();
-//        $scope.updateTable();
-//    };
-//
-//    $scope.selectGroupSection($scope.groups[0]);
+    $scope.selectSection = function(section){
+        $scope.dataSource.activeSection = section;
+    };
 
     $scope.selectOptions = visits;
 
@@ -92,6 +82,46 @@ angular.module('starter.controllers', [])
 
     $scope.toggleSpinner = function(){
         $scope.showSpinner = !$scope.showSpinner;
+    };
+
+    var header = $ionicScrollDelegate.$getByHandle("header");
+    var footer = $ionicScrollDelegate.$getByHandle("footer");
+    var table = $ionicScrollDelegate.$getByHandle("table");
+
+    $scope.onScrollTable = function(){
+        var pos = table.getScrollPosition();
+        header.scrollTo(pos.left,pos.top,false);
+        footer.scrollTo(pos.left,pos.top,false);
+    };
+
+    $ionicModal.fromTemplateUrl('my-modal.html', {
+        scope: $scope,
+        animation: 'slide-in-up'
+    }).then(function(modal) {
+        $scope.modal = modal;
+    });
+    $scope.openModal = function() {
+        $scope.modal.show();
+    };
+    $scope.closeModal = function() {
+        $scope.modal.hide();
+    };
+    //Cleanup the modal when we're done with it!
+    $scope.$on('$destroy', function() {
+        $scope.modal.remove();
+    });
+    // Execute action on hide modal
+    $scope.$on('modal.hidden', function() {
+        // Execute action
+    });
+    // Execute action on remove modal
+    $scope.$on('modal.removed', function() {
+        // Execute action
+    });
+
+
+    $scope.addLesson = function(){
+        $scope.dataSource.addLesson(new Date(Date.now()));
     };
 
 })

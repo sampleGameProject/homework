@@ -1,15 +1,9 @@
 /* Empty. Add your own CSS if you like */
 
 .table-header-item{
-    height:33px;
+    height:44px;
     width:130px;
     margin: 0px;
-}
-
-
-
-.table-row {
-    height:35px;
 }
 
 .label, .table-container{
@@ -18,9 +12,9 @@
     font-family:"Helvetica Neue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
 }
 
-tr:nth-child(even) {
-    background-color: #dddddd;
-}
+/*div:nth-child(even) {*/
+    /*background-color: #e5e5e5;*/
+/*}*/
 
 i.ion-android-dropdown{
     top: 20px;
@@ -28,7 +22,6 @@ i.ion-android-dropdown{
 
 .spinner-container{
     position: relative;
-
 }
 
 .spinner-content{
@@ -69,40 +62,13 @@ i.ion-android-dropdown{
     border-width:thin;
 }
 
-.left-title{
-    float: left;
-    width:140px;
-    margin-right: 0px;
-}
-
-.top-container {
-
-}
-
-.left-spacer{
-    width:140px;
-    height: 40px;
-
-}
-
-.bottom-container{
-    margin-top:33px;
-}
 
 .right-container{
-    margin-left:140px;
+    margin-left:135px;
 
     border-color:gray;
     border-left:solid;
     border-left-width:1px;
-}
-
-.groups-table {
-    float: left;
-    width: 200px;
-    height: 20px;
-    margin-right: 8px;
-    background-color: linen;
 }
 
 .hight-as-need {
@@ -117,70 +83,66 @@ i.ion-android-dropdown{
     min-width: 100%;
 }
 
-.table-content {
-    padding:0px;
-}
-
 .header-scroll{
-    margin-left: 140px;
-    height:33px;
+    margin-left: 135px;
 }
 
-.header-scroll .table-header-item{
-    height: 33px;
+.footer-scroll, .header-scroll,  .table-header-item, .table-header-footer-title{
+    height: 44px;
 }
 
 .table-row-name-item .table-row-item .table-header{
     width:100px;
-    height:40px;
+    height:44px;
     padding:0px;
     margin:0px;
 }
 
 .table-header-item{
-    height:33px;
+    height:44px;
     width:130px;
     margin: 0px;
 }
 
 .table-date-item{
-    height:33px;
+    height:44px;
     width:130px;
     margin: 0px;
     float:left;
 }
 
 .table-row-name-item{
-    height:49px;
+    height:44px;
     width:130px;
     padding:0px;
     margin:0px;
 }
 
 
-.table-row-name-item {
-
+.table-row-name-item, .table-header-item {
     font-weight:bold;
 }
 
 .table-row-item {
-    height:49px;
+    height:44px;
     width:130px;
     padding:0px;
     margin:0px;
 }
 
-.table-header {
 
+.table-header-footer-title{
+    min-width: 130px;
+    float: left;
+    text-align: center;
+    font-weight: bold;
 }
 
-.table-header-item {
-
-    font-weight:bold;
+.footer-scroll{
+    margin-left: 5px;
 }
 
-.header{
-    border-color:gray;
-    border-bottom:solid;
-    border-bottom-width:1px;
+
+.no-padding{
+    padding:0px;
 }
