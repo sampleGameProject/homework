@@ -38,45 +38,57 @@
 
     <ion-header-bar class="bar-subheader no-padding">
         <div class="table-header-footer-title">{{dataSource.headerTitle}}</div>
-        <ion-scroll direction="x" class="wide-as-needed header-scroll" delegate-handle="header"
-                    scrollbar-x ="false">
-            <button class="button table-header-item" ng-repeat="lesson in dataSource.lessons">{{lesson.getDateString()}}</button>
+        <ion-scroll direction="x" class="wide-as-needed header-scroll" delegate-handle="header" scrollbar-x ="false">
+            <button class="button table-header-item normal" ng-repeat="lesson in dataSource.lessons" ng-click="selectLesson(lesson)"
+                    ng-class="{active: dataSource.activeLesson == lesson,
+                                wide : dataSource.activeLesson == lesson }">
+                {{lesson.getDateString()}}
+            </button>
         </ion-scroll>
     </ion-header-bar>
 
     <ion-content class="no-padding">
-        <ion-list class="no-padding">
-            <ion-item class="no-padding">
 
-                <div class="left-container">
-                    <div ng-repeat="row in dataSource.activeSection.rows" class="table-row-name-item">
-                        <span class="table-row-name-item">{{row.title}}</span>
+        <div class="left-container">
+            <div ng-repeat="row in dataSource.activeSection.rows" class="table-row-name-item">
+                <span class="table-row-name-item">{{row.title}}</span>
+            </div>
+        </div>
+
+        <ion-scroll direction="x" class="wide-as-needed right-container"
+                delegate-handle="table" on-scroll="onScrollTable()">
+
+            <div ng-repeat="row in dataSource.activeSection.rows" class="table-row">
+                <div ng-repeat="item in row.items" class="table-row-item normal"
+                     ng-class="{active: dataSource.activeLesson == item.lesson,
+                                wide : dataSource.activeLesson == item.lesson }">
+
+                    <div ng-if="item.lesson == dataSource.activeLesson" class="wide">
+                        <button class="button" ng-repeat="visitType in selectOptions"
+                                ng-class="{active:item.visit.type == visitType}" ng-click="selectVisitType(item.visit,visitType)">
+                            {{visitType}}
+                         </button>
                     </div>
+
+                    <div ng-if="item.lesson != dataSource.activeLesson">
+                        <button class="button table-row-item normal">
+                            {{item.visit.type}}
+                        </button>
+                    </div>
+
                 </div>
+            </div>
 
-                <ion-scroll direction="x" class="wide-as-needed right-container"
-                        delegate-handle="table" on-scroll="onScrollTable()">
-
-                        <div ng-repeat="row in dataSource.activeSection.rows" class="table-row-item">
-
-                            <select class="table-row-item"
-                                ng-repeat="item in row.items"
-                                ng-model="item.visit"
-                                ng-options="visit for visit in selectOptions"></select>
-
-                        </div>
-
-                </ion-scroll>
-
-            </ion-item>
-        </ion-list>
+        </ion-scroll>
     </ion-content>
 
     <ion-footer-bar class="no-padding">
         <div class="table-header-footer-title">{{dataSource.footerTitle}}</div>
         <ion-scroll direction="x" class="wide-as-needed footer-scroll" delegate-handle="footer"
                     scrollbar-x ="false">
-            <button class="button table-header-item" ng-repeat="lesson in dataSource.lessons" ng-model="lesson">{{lesson.note}}</button>
+            <button class="button table-header-item normal" ng-repeat="lesson in dataSource.lessons" ng-model="lesson"
+                    ng-class="{active: dataSource.activeLesson == lesson,
+                                wide : dataSource.activeLesson == lesson }">{{lesson.note}}</button>
         </ion-scroll>
     </ion-footer-bar>
 </ion-view>

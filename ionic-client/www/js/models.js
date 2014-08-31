@@ -87,11 +87,11 @@ function LabQuestionCompletion(labWorkQuestion,lesson) {
 
 //#region sheet
 
-var visits = ["-", "+", "+/-", "-/+"];
+var visitTypes = ["Н", "+", "+/Н", "Н/+"];
 
 function Visit(student) {
     this.student = student;
-    this.visit = visits[0];
+    this.type = visitTypes[0];
 }
 
 function Lesson(date) {
@@ -154,8 +154,8 @@ Sheet.prototype.getTitle = function () {
     return title;
 }
 
-Sheet.prototype.getStudentVisits = function (student) {
-    var visits = [];
+Sheet.prototype.getStudentVisitsInfo = function (student) {
+    var visitsInfo = [];
 
     var lessonCount = this.lessons.length;
 
@@ -166,12 +166,15 @@ Sheet.prototype.getStudentVisits = function (student) {
             var curVisit = curLesson.visits[j];
 
             if (curVisit.student == student) {
-                visits.push(curVisit);
+                visitsInfo.push({
+                    lesson:curLesson,
+                    visit:curVisit
+                });
             }
         }
     }
 
-    return visits;
+    return visitsInfo;
 }
 
 Sheet.prototype.getAvailableLabs = function () {
@@ -323,6 +326,7 @@ function SheetTableDataSource(sheet) {
     this.init();
 
     this.activeSection = this.sections[0];
+    this.activeLesson = null;
 }
 
 SheetTableDataSource.prototype.constructor = SheetTableDataSource;
@@ -334,13 +338,6 @@ SheetTableDataSource.prototype.init = function(){
     this.headerTitle = "Группа \\ Дата";
     this.footerTitle = "Заметки";
     this.lessons = this.sheet.lessons;
-
-//    var lessonsCount = this.sheet.lessons.length;
-//
-//    for (var i = 0; i < lessonsCount; i++) {
-//        this.header.items.push(this.sheet.lessons[i].getDateString());
-//        this.footer.items.push(this.sheet.lessons[i]);
-//    }
 
     //init sections
 
@@ -360,7 +357,7 @@ SheetTableDataSource.prototype.init = function(){
 
             var newRow = new Row(title);
 
-            newRow.items = this.sheet.getStudentVisits(curStudent);
+            newRow.items = this.sheet.getStudentVisitsInfo(curStudent);
             newSection.rows.push(newRow);
         }
 

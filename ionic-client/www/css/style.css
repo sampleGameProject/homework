@@ -91,8 +91,11 @@ i.ion-android-dropdown{
     height: 44px;
 }
 
+.table-row{
+    height: 44px;
+}
+
 .table-row-name-item .table-row-item .table-header{
-    width:100px;
     height:44px;
     padding:0px;
     margin:0px;
@@ -100,20 +103,17 @@ i.ion-android-dropdown{
 
 .table-header-item{
     height:44px;
-    width:130px;
     margin: 0px;
 }
 
 .table-date-item{
     height:44px;
-    width:130px;
     margin: 0px;
     float:left;
 }
 
 .table-row-name-item{
     height:44px;
-    width:130px;
     padding:0px;
     margin:0px;
 }
@@ -125,9 +125,9 @@ i.ion-android-dropdown{
 
 .table-row-item {
     height:44px;
-    width:130px;
     padding:0px;
     margin:0px;
+    display: inline-block;
 }
 
 
@@ -145,4 +145,16 @@ i.ion-android-dropdown{
 
 .no-padding{
     padding:0px;
+}
+
+.float-left{
+    float:left;
+}
+
+.normal{
+    width: 100px;
+}
+
+.wide{
+    width: 208px;
 }

@@ -72,7 +72,25 @@ angular.module('starter.controllers', [])
         $scope.dataSource.activeSection = section;
     };
 
-    $scope.selectOptions = visits;
+    $scope.selectLesson = function(lesson){
+
+        if($scope.dataSource.activeLesson == lesson)
+        {
+            $scope.dataSource.activeLesson = null;
+            console.log("activeLesson is null");
+        }
+        else
+        {
+            $scope.dataSource.activeLesson = lesson;
+            console.log("activeLesson: " + lesson.getDateString());
+        }
+    };
+
+    $scope.selectVisitType = function(visit,type){
+        visit.type = type;
+    };
+
+    $scope.selectOptions = visitTypes;
 
     $scope.goBack = function() {
         $ionicNavBarDelegate.back();
