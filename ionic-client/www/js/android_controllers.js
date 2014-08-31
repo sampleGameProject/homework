@@ -57,10 +57,8 @@ angular.module('starter.controllers', [])
     $ionicNavBarDelegate, $ionicScrollDelegate,$ionicModal) {
     console.log("test SheetController");
 
-    $scope.sheets = AppData.sheets;
-
-    for(var i = 0; i < $scope.sheets.length; i++){
-        var current = $scope.sheets[i];
+    for(var i = 0; i < AppData.sheets.length; i++){
+        var current = AppData.sheets[i];
 
         if(current.id == $stateParams.sheetId){
             $scope.dataSource = new SheetTableDataSource(current);
@@ -72,18 +70,11 @@ angular.module('starter.controllers', [])
         $scope.dataSource.activeSection = section;
     };
 
-    $scope.selectLesson = function(lesson){
-
+    $scope.selectLesson = function(lesson) {
         if($scope.dataSource.activeLesson == lesson)
-        {
             $scope.dataSource.activeLesson = null;
-            console.log("activeLesson is null");
-        }
         else
-        {
             $scope.dataSource.activeLesson = lesson;
-            console.log("activeLesson: " + lesson.getDateString());
-        }
     };
 
     $scope.selectVisitType = function(visit,type){
@@ -112,36 +103,49 @@ angular.module('starter.controllers', [])
         footer.scrollTo(pos.left,pos.top,false);
     };
 
-    $ionicModal.fromTemplateUrl('my-modal.html', {
+    $scope.editLessonData = {
+        lesson : null,
+        note : null
+    };
+
+    $ionicModal.fromTemplateUrl('edit-lesson-note.html', function(modal) {
+        $scope.taskModal = modal;
+    }, {
         scope: $scope,
         animation: 'slide-in-up'
-    }).then(function(modal) {
-        $scope.modal = modal;
-    });
-    $scope.openModal = function() {
-        $scope.modal.show();
-    };
-    $scope.closeModal = function() {
-        $scope.modal.hide();
-    };
-    //Cleanup the modal when we're done with it!
-    $scope.$on('$destroy', function() {
-        $scope.modal.remove();
-    });
-    // Execute action on hide modal
-    $scope.$on('modal.hidden', function() {
-        // Execute action
-    });
-    // Execute action on remove modal
-    $scope.$on('modal.removed', function() {
-        // Execute action
     });
 
+    // Open
+    $scope.editLessonNote = function(lesson) {
+        $scope.editLessonData.lesson = lesson;
+        $scope.editLessonData.note = lesson.note.slice(0,lesson.note.length);
+
+        $scope.taskModal.show();
+    };
+
+    // Close
+    $scope.closeEditLessonNote = function() {
+        $scope.editLessonData.lesson = null;
+        $scope.editLessonData.note = null;
+
+        $scope.taskModal.hide();
+    };
+
+    // Called when the form is submitted
+    $scope.saveLessonNote = function() {
+        $scope.editLessonData.lesson.note = $scope.editLessonData.note;
+        $scope.editLessonData.lesson = null;
+        $scope.editLessonData.note = null;
+
+        $scope.taskModal.hide();
+    };
 
     $scope.addLesson = function(){
-        $scope.dataSource.addLesson(new Date(Date.now()));
+//        $scope.dataSource.addLesson(new Date(Date.now()));
+//        var active = $scope.dataSource.activeSection;
+//        $scope.dataSource.activeSection = null;
+//        $scope.dataSource.activeSection = active;
     };
-
 })
 
 .controller('SubjectController',function($scope, AppData, $stateParams){

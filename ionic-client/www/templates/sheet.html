@@ -88,10 +88,44 @@
                     scrollbar-x ="false">
             <button class="button table-header-item normal" ng-repeat="lesson in dataSource.lessons" ng-model="lesson"
                     ng-class="{active: dataSource.activeLesson == lesson,
-                                wide : dataSource.activeLesson == lesson }">{{lesson.note}}</button>
+                                wide : dataSource.activeLesson == lesson }"
+                    ng-click="editLessonNote(lesson)">
+                {{lesson.note}}
+            </button>
         </ion-scroll>
     </ion-footer-bar>
 </ion-view>
+
+<script id="edit-lesson-note.html" type="text/ng-template">
+
+    <div class="modal">
+
+        <!-- Modal header bar -->
+        <ion-header-bar class="bar-secondary">
+            <h1 class="title">Заметка от {{editLessonData.lesson.getDateString()}}</h1>
+            <button class="button button-clear button-positive" ng-click="closeEditLessonNote()">Отмена</button>
+        </ion-header-bar>
+
+        <!-- Modal content area -->
+        <ion-content>
+
+            <form ng-submit="saveLessonNote()">
+                <div class="list">
+                    <label class="item item-input">
+                        <input type="text" placeholder="What do you need to do?" ng-model="editLessonData.note">
+                    </label>
+                </div>
+                <div class="padding">
+                    <button type="submit" class="button button-block button-positive">Сохранить</button>
+                </div>
+            </form>
+
+        </ion-content>
+
+    </div>
+
+</script>
+
 
 <script id="my-modal.html" type="text/ng-template">
     <ion-modal-view>
