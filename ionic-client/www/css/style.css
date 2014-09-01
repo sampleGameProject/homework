@@ -158,10 +158,39 @@ i.ion-android-dropdown{
     float:left;
 }
 
+.normal, .wide{
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
 .normal{
     width: 100px;
 }
 
 .wide{
     width: 208px;
+}
+
+.bigheader{
+    height: 88px;
+}
+
+.animate-if {
+    background:white;
+    border:1px solid black;
+}
+
+.animate-if.ng-enter, .animate-if.ng-leave {
+    -webkit-transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.3s;
+    transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.3s;
+}
+
+.animate-if.ng-enter,
+.animate-if.ng-leave.ng-leave-active {
+    opacity:0;
+}
+
+.animate-if.ng-leave,
+.animate-if.ng-enter.ng-enter-active {
+    opacity:1;
 }
