@@ -37,14 +37,21 @@
     </div>
 
     <ion-header-bar class="bar-subheader no-padding">
-        <div class="table-header-footer-title">{{dataSource.headerTitle}}</div>
 
-        <ion-scroll direction="x" class="wide-as-needed header-scroll" delegate-handle="header" scrollbar-x ="false">
-            <button class="button table-header-item normal" ng-repeat="lesson in dataSource.lessons" ng-click="selectLesson(lesson)"
-                    ng-class="{active: dataSource.activeLesson == lesson, wide : dataSource.activeLesson == lesson }">
-                {{lesson.getDateString()}}
-            </button>
-        </ion-scroll>
+        <div>
+            test
+        </div>
+
+        <div>
+            <div class="table-header-footer-title">{{dataSource.headerTitle}}</div>
+
+            <ion-scroll direction="x" class="wide-as-needed header-scroll" delegate-handle="header" scrollbar-x ="false">
+                <button class="button table-header-item normal" ng-repeat="lesson in dataSource.lessons" ng-click="selectLesson(lesson)"
+                        ng-class="{active: dataSource.activeLesson == lesson, wide : dataSource.activeLesson == lesson }">
+                    {{lesson.getDateString()}}
+                </button>
+            </ion-scroll>
+        </div>
     </ion-header-bar>
 
     <ion-content class="no-padding">

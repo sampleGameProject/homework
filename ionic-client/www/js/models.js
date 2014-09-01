@@ -367,6 +367,19 @@ SheetTableDataSource.prototype.init = function(){
     }
 
     this.activeSection = this.sections[activeSectionIndex];
+
+    //init labs if it necessary
+
+    if(!this.sheet.isLection){ //it's practice
+
+        this.subheaders = [];
+        this.subheaders.push("Посещаемость");
+
+        for(i = 0; i < this.sheet.labWorkCompletions.length; i++){
+            var labWorkCompletion = this.sheet.labWorkCompletions[i];
+            this.subheaders.push(labWorkCompletion.labWork.name);
+        }
+    }
 };
 
 SheetTableDataSource.prototype.addLesson = function(date){
