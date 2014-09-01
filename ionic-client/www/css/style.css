@@ -76,7 +76,7 @@ i.ion-android-dropdown{
 }
 
 .wide-as-needed {
-    /*overflow: scroll;*/
+    overflow: scroll;
     white-space: nowrap;
 }
 .scroll {
@@ -100,6 +100,13 @@ i.ion-android-dropdown{
     padding:0px;
     margin:0px;
 }
+
+.table-row-name-item{
+    vertical-align: middle;
+    border: 1px;
+    color: #000000;
+}
+
 
 .table-header-item{
     height:44px;

@@ -104,7 +104,7 @@ Lesson.prototype.constructor = Lesson;
 
 Lesson.prototype.getDateString = function(){
     return this.date.getDate() + '.' + (this.date.getMonth() + 1) + '.' + this.date.getFullYear();
-}
+};
 
 function Sheet(subject, groups, isLection) {
 
@@ -137,7 +137,7 @@ Sheet.prototype.addLesson = function (date) {
     
 
     this.lessons.push(newLesson);
-}
+};
 
 Sheet.prototype.getTitle = function () {
     var title = this.subject.name + " " + (this.isLection ? "Лекция" : "Практика") + " (";
@@ -152,7 +152,7 @@ Sheet.prototype.getTitle = function () {
     title += groups[length - 1].name + ")";
 
     return title;
-}
+};
 
 Sheet.prototype.getStudentVisitsInfo = function (student) {
     var visitsInfo = [];
@@ -175,7 +175,7 @@ Sheet.prototype.getStudentVisitsInfo = function (student) {
     }
 
     return visitsInfo;
-}
+};
 
 Sheet.prototype.getAvailableLabs = function () {
     var available = [];
@@ -195,13 +195,13 @@ Sheet.prototype.getAvailableLabs = function () {
 
 
     return available;
-}
+};
 
 Sheet.prototype.releaseLab = function (lab,lesson) {
     for (var group in this.groups) {
         this.labWorkCompletions.push(new LabWorkCompletion(lab,lesson,this));
     }
-}
+};
 
 //#end region
 
@@ -322,11 +322,10 @@ function SheetTableDataSource(sheet) {
 
     this.sheet = sheet;
     this.title = sheet.getTitle();
+    this.sections = [];
+    this.activeLesson = null;
 
     this.init();
-
-    this.activeSection = this.sections[0];
-    this.activeLesson = null;
 }
 
 SheetTableDataSource.prototype.constructor = SheetTableDataSource;
@@ -335,26 +334,29 @@ SheetTableDataSource.prototype.init = function(){
 
     //init header & footer
 
-    this.headerTitle = "Группа \\ Дата";
+    this.headerTitle = "Группа / Дата";
     this.footerTitle = "Заметки";
     this.lessons = this.sheet.lessons;
 
     //init sections
 
+    var activeSectionIndex = this.sections.indexOf(this.activeSection);
+    if(activeSectionIndex == -1)
+        activeSectionIndex = 0;
+
     this.sections = [];
 
     var groupsCount = this.sheet.groups.length;
 
-    for (i = 0; i < groupsCount; i++) {
+    for (var i = 0; i < groupsCount; i++) {
 
         var currentGroup = this.sheet.groups[i];
         var newSection = new Section(currentGroup.name);
 
         for (var j = 0; j < currentGroup.students.length; j++) {
+
             var curStudent = currentGroup.students[j];
-
             var title = curStudent.num + ". " + curStudent.name;
-
             var newRow = new Row(title);
 
             newRow.items = this.sheet.getStudentVisitsInfo(curStudent);
@@ -363,10 +365,11 @@ SheetTableDataSource.prototype.init = function(){
 
         this.sections.push(newSection);
     }
+
+    this.activeSection = this.sections[activeSectionIndex];
 };
 
 SheetTableDataSource.prototype.addLesson = function(date){
-
     this.sheet.addLesson(date);
     this.init();
 };

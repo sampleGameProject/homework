@@ -72,9 +72,21 @@ angular.module('starter.controllers', [])
 
     $scope.selectLesson = function(lesson) {
         if($scope.dataSource.activeLesson == lesson)
+        {
             $scope.dataSource.activeLesson = null;
+
+//            var position = table.getScrollPosition();
+//            table.scrollTo(position.left - 108, position.top, true);
+        }
+
         else
+        {
             $scope.dataSource.activeLesson = lesson;
+
+//            var position = table.getScrollPosition();
+//            table.scrollTo(position.left + 108, position.top, true);
+        }
+
     };
 
     $scope.selectVisitType = function(visit,type){
@@ -141,11 +153,11 @@ angular.module('starter.controllers', [])
     };
 
     $scope.addLesson = function(){
-//        $scope.dataSource.addLesson(new Date(Date.now()));
-//        var active = $scope.dataSource.activeSection;
-//        $scope.dataSource.activeSection = null;
-//        $scope.dataSource.activeSection = active;
+        $scope.dataSource.addLesson(new Date(Date.now()));
+        var position = table.getScrollPosition();
+        table.scrollTo(position.left + 100, position.top, true);
     };
+
 })
 
 .controller('SubjectController',function($scope, AppData, $stateParams){
