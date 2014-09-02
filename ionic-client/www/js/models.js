@@ -222,11 +222,35 @@ function createDemo() {
             new LabWorkQuestion("Вопрос №3 на лаб №2"),
             new LabWorkQuestion("Вопрос №4 на лаб №2")
         ]),
-        new LabWork("Лаб.№3 Разработка ТЗ", "Разработать техническое задание для проекта", [
+        new LabWork("Лаб.№3 Техническое задание", "Разработать техническое задание для проекта", [
             new LabWorkQuestion("Вопрос №1 на лаб №3"),
             new LabWorkQuestion("Вопрос №2 на лаб №3"),
             new LabWorkQuestion("Вопрос №3 на лаб №3"),
             new LabWorkQuestion("Вопрос №4 на лаб №3")
+        ]),
+        new LabWork("Лаб.№4 Модель данных", "Разработать модель данных для проекта", [
+            new LabWorkQuestion("Вопрос №1 на лаб №4"),
+            new LabWorkQuestion("Вопрос №2 на лаб №4"),
+            new LabWorkQuestion("Вопрос №3 на лаб №4"),
+            new LabWorkQuestion("Вопрос №4 на лаб №4")
+        ]),
+        new LabWork("Лаб.№5 SADT-диаграмма", "Построить SADT-диаграмму для проекта", [
+            new LabWorkQuestion("Вопрос №1 на лаб №5"),
+            new LabWorkQuestion("Вопрос №2 на лаб №5"),
+            new LabWorkQuestion("Вопрос №3 на лаб №5"),
+            new LabWorkQuestion("Вопрос №4 на лаб №5")
+        ]),
+        new LabWork("Лаб.№6 DFD-диаграмма", "Построить DFD-диаграмму для проекта", [
+            new LabWorkQuestion("Вопрос №1 на лаб №6"),
+            new LabWorkQuestion("Вопрос №2 на лаб №6"),
+            new LabWorkQuestion("Вопрос №3 на лаб №6"),
+            new LabWorkQuestion("Вопрос №4 на лаб №6")
+        ]),
+        new LabWork("Лаб.№7 Архитектура ситстемы", "Выбрать подходящую архитектуру для проекта и обосновать выбор", [
+            new LabWorkQuestion("Вопрос №1 на лаб №7"),
+            new LabWorkQuestion("Вопрос №2 на лаб №7"),
+            new LabWorkQuestion("Вопрос №3 на лаб №7"),
+            new LabWorkQuestion("Вопрос №4 на лаб №7")
         ])]);
 
 
@@ -282,6 +306,13 @@ function createDemo() {
 
 
     var sheet2 = new Sheet(subject1, [group10po1], false);
+    sheet2.releaseLab(subject1.labWorks[0],sheet2.lessons[1]);
+    sheet2.releaseLab(subject1.labWorks[1],sheet2.lessons[1]);
+    sheet2.releaseLab(subject1.labWorks[2],sheet2.lessons[1]);
+    sheet2.releaseLab(subject1.labWorks[3],sheet2.lessons[1]);
+    sheet2.releaseLab(subject1.labWorks[4],sheet2.lessons[1]);
+    sheet2.releaseLab(subject1.labWorks[5],sheet2.lessons[1]);
+    sheet2.releaseLab(subject1.labWorks[6],sheet2.lessons[1]);
 
     sheet2.addLesson(new Date("October 13, 2014 13:15:00"));
     sheet2.addLesson(new Date("October 17, 2014 13:15:00"));

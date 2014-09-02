@@ -47,7 +47,7 @@
     <ion-header-bar class="bar-subheader no-padding" ng-class="{bigheader:dataSource.subheaders.length > 1}">
 
         <div ng-if="dataSource.subheaders.length > 1">
-            <ion-scroll direction="x" class="wide-as-needed" delegate-handle="header" scrollbar-x ="false">
+            <ion-scroll direction="x" class="wide-as-needed">
                 <button class="button table-header-item wide" ng-repeat="subheader in dataSource.subheaders" >
                     {{subheader}}
                 </button>
