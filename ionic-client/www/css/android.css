@@ -13,39 +13,15 @@
         display: none;
     }
 
+    .lab-spinner-content{
 
-    td{
-        width: 160px;
-        height: 50px;
-        background-color: #f5f5f5;
-        min-width: 160px;
-        min-height: 50px;
+        position: absolute;
+        z-index: 12;
+        top:43px;
+        width: 250px;
+        left:calc(100% - 250px) !important;
+        /*-webkit-transform: translate3d(calc(100% - 250px), 0px, 0px) !important;*/
     }
-
-    .table-container{
-        font-size: 16px;
-        border-width: 1px;
-        border: #000000;
-    }
-
-    .table-headers{
-        float: left;
-        -webkit-transform: translate3d(130px, 0px, 0px) !important;
-        width: calc(100% - 130px) !important;
-    }
-
-    .table-first-column{
-        float: left;
-
-        width: 130px;
-    }
-
-    .table-columns{
-        -webkit-transform: translate3d(130px, 50px, 0px) !important;
-        width: calc(100% - 130px) !important;
-        height: calc(100% - 50px) !important;
-    }
-
 }
 
 .main-content-item{

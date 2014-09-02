@@ -158,6 +158,18 @@ angular.module('starter.controllers', [])
         table.scrollTo(position.left + 100, position.top, true);
     };
 
+
+    $scope.showLabsSpinner = false;
+
+    $scope.toggleLabsSpinner = function(){
+        $scope.showLabsSpinner = !$scope.showLabsSpinner;
+    };
+
+    $scope.releaseLab = function(lab){
+        $scope.showLabsSpinner = false;
+        $scope.dataSource.sheet.releaseLab(lab);
+        $scope.dataSource.init();
+    }
 })
 
 .controller('SubjectController',function($scope, AppData, $stateParams){

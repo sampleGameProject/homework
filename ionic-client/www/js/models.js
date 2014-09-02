@@ -48,11 +48,13 @@ function LabWorkCompletion(labWork, startLesson,sheet) {
 
     this.studentLabWorkCompletions = [];
 
-    for (var group in sheet.groups) {
-        for (var student in group.students) {
-            this.studentLabWorkCompletions.push(new StudentLabWorkCompletion(student));
-        }
-    }
+    var completions = this.studentLabWorkCompletions;
+
+    sheet.groups.forEach(function(group){
+      group.students.forEach(function(student){
+            completions.push(new StudentLabWorkCompletion(student));
+        });
+    });
 }
 
 function StudentLabWorkCompletion(student) {
@@ -67,15 +69,15 @@ StudentLabWorkCompletion.prototype.constructor = StudentLabWorkCompletion;
 
 StudentLabWorkCompletion.prototype.markQuestionAsAnswered = function (question,lesson) {
     this.labQuestionsCompletions.push(new LabQuestionCompletion(question,lesson));
-}
+};
 
 StudentLabWorkCompletion.prototype.markTaskAsCompleted = function (lesson) {
     this.taskCompletionLesson = lesson
-}
+};
 
 StudentLabWorkCompletion.prototype.markLabAsCompleted = function (lesson) {
     this.labCompletionLesson = lesson;
-}
+};
 
 function LabQuestionCompletion(labWorkQuestion,lesson) {
     this.labWorkQuestion = labWorkQuestion;
@@ -178,29 +180,26 @@ Sheet.prototype.getStudentVisitsInfo = function (student) {
 };
 
 Sheet.prototype.getAvailableLabs = function () {
+
     var available = [];
 
-
-    for (var lab in this.subject.labWorks) {
+    this.subject.labWorks.forEach(function(lab){
         available.push(lab);
-    }
+    });
 
-    for (var labCompletion in this.labWorkCompletions) {
+    this.labWorkCompletions.forEach(function(labCompletion){
         var index = available.indexOf(labCompletion.labWork);
 
         if (index != -1) {
-            available.slice(index, 1);
+            available.splice(index, 1);
         }
-    }
-
+    });
 
     return available;
 };
 
 Sheet.prototype.releaseLab = function (lab,lesson) {
-    for (var group in this.groups) {
         this.labWorkCompletions.push(new LabWorkCompletion(lab,lesson,this));
-    }
 };
 
 //#end region
@@ -306,17 +305,19 @@ function createDemo() {
 
 
     var sheet2 = new Sheet(subject1, [group10po1], false);
-    sheet2.releaseLab(subject1.labWorks[0],sheet2.lessons[1]);
-    sheet2.releaseLab(subject1.labWorks[1],sheet2.lessons[1]);
-    sheet2.releaseLab(subject1.labWorks[2],sheet2.lessons[1]);
-    sheet2.releaseLab(subject1.labWorks[3],sheet2.lessons[1]);
-    sheet2.releaseLab(subject1.labWorks[4],sheet2.lessons[1]);
-    sheet2.releaseLab(subject1.labWorks[5],sheet2.lessons[1]);
-    sheet2.releaseLab(subject1.labWorks[6],sheet2.lessons[1]);
+
 
     sheet2.addLesson(new Date("October 13, 2014 13:15:00"));
     sheet2.addLesson(new Date("October 17, 2014 13:15:00"));
     sheet2.addLesson(new Date("October 20, 2014 13:15:00"));
+
+    sheet2.releaseLab(subject1.labWorks[0],sheet2.lessons[1]);
+//    sheet2.releaseLab(subject1.labWorks[1],sheet2.lessons[1]);
+//    sheet2.releaseLab(subject1.labWorks[2],sheet2.lessons[1]);
+//    sheet2.releaseLab(subject1.labWorks[3],sheet2.lessons[1]);
+//    sheet2.releaseLab(subject1.labWorks[4],sheet2.lessons[1]);
+//    sheet2.releaseLab(subject1.labWorks[5],sheet2.lessons[1]);
+//    sheet2.releaseLab(subject1.labWorks[6],sheet2.lessons[1]);
 
     var sheet3 = new Sheet(subject1, [group10po2], false);
 

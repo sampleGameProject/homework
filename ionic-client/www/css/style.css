@@ -27,7 +27,6 @@ i.ion-android-dropdown{
 .spinner-content{
     position: absolute;
     z-index: 12;
-    background-color: red;
     top:43px;
     left: 160px;
     width: 150px;

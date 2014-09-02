@@ -27,7 +27,8 @@
                 <i class="ion-android-add right-bar-icon"></i>
             </button>
 
-            <button ng-if="!dataSource.sheet.isLection" class="button button-clear android-more-button">
+            <button ng-if="!dataSource.sheet.isLection" class="button button-clear android-more-button"
+                    ng-click="toggleLabsSpinner()">
                 <i class="ion-android-more right-bar-icon"></i>
             </button>
         </div>
@@ -44,10 +45,18 @@
         </ion-radio>
     </div>
 
+    <div ng-if="showLabsSpinner" class="animate-if lab-spinner-content">
+        <ion-list>
+            <ion-item ng-repeat="lab in dataSource.sheet.getAvailableLabs()" ng-click="releaseLab(lab)">
+                {{lab.name}}
+            </ion-item>
+        </ion-list>
+    </div>
+
     <ion-header-bar class="bar-subheader no-padding" ng-class="{bigheader:dataSource.subheaders.length > 1}">
 
         <div ng-if="dataSource.subheaders.length > 1">
-            <ion-scroll direction="x" class="wide-as-needed">
+            <ion-scroll direction="x" class="wide-as-needed" scrollbar-x ="false">
                 <button class="button table-header-item wide" ng-repeat="subheader in dataSource.subheaders" >
                     {{subheader}}
                 </button>
