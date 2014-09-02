@@ -34,17 +34,21 @@ function LabWorkQuestion(text) {
     this.text = text;
 }
 
-function LabWork(name,task,questions) {
+function LabWorkStage(stage){
+    this.stage = stage;
+}
+
+function LabWork(name,task,stages,questions) {
     this.name = name;
     this.task = task;
+    this.stages = stages;
     this.questions = questions;
-    this.limit = null; //2 nedeli
+    this.limit = 2; //2 занятия
 }
 
 function LabWorkCompletion(labWork, startLesson,sheet) {
     this.labWork = labWork;
     this.startLesson = startLesson;
-    this.finishLesson = null;
 
     this.studentLabWorkCompletions = [];
 
@@ -59,7 +63,7 @@ function LabWorkCompletion(labWork, startLesson,sheet) {
 
 function StudentLabWorkCompletion(student) {
     this.student = student;
-    this.taskCompletionLesson = null;
+
     this.labCompletionLesson = null;
 
     this.labQuestionsCompletions = [];
@@ -71,9 +75,6 @@ StudentLabWorkCompletion.prototype.markQuestionAsAnswered = function (question,l
     this.labQuestionsCompletions.push(new LabQuestionCompletion(question,lesson));
 };
 
-StudentLabWorkCompletion.prototype.markTaskAsCompleted = function (lesson) {
-    this.taskCompletionLesson = lesson
-};
 
 StudentLabWorkCompletion.prototype.markLabAsCompleted = function (lesson) {
     this.labCompletionLesson = lesson;
