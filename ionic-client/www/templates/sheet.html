@@ -18,6 +18,11 @@
                 {{dataSource.title}}
             </div>
 
+            <a ng-if="!dataSource.sheet.isLection" class="header-title button button-clear" ng-click="toggleViewsSpinner()">
+                {{dataSource.activeView.title}}
+                <i class="ion-android-dropdown"> </i>
+            </a>
+
         </div>
 
         <h1 class="title"></h1>
@@ -45,6 +50,17 @@
         </ion-radio>
     </div>
 
+    <div ng-if="!dataSource.sheet.isLection" class="animate-if spinner-content">
+        <ion-radio ng-repeat="view in views"
+                   ng-value="view"
+                   ng-model="dataSource.activeView"
+                   ng-change="activeViewChanged()"
+                   name="section-side">
+            {{ view.title }}
+        </ion-radio>
+    </div>
+
+
     <div ng-if="showLabsSpinner" class="animate-if lab-spinner-content">
         <ion-list>
             <ion-item ng-repeat="lab in dataSource.sheet.getAvailableLabs()" ng-click="releaseLab(lab)">
@@ -53,26 +69,30 @@
         </ion-list>
     </div>
 
-    <ion-header-bar class="bar-subheader no-padding" ng-class="{bigheader:dataSource.subheaders.length > 1}">
+    <ion-header-bar class="bar-subheader no-padding">
 
-        <div ng-if="dataSource.subheaders.length > 1">
-            <ion-scroll direction="x" class="wide-as-needed" scrollbar-x ="false">
-                <button class="button table-header-item wide" ng-repeat="subheader in dataSource.subheaders" >
-                    {{subheader}}
-                </button>
-            </ion-scroll>
-        </div>
-
-        <div>
+        <div ng-if="isVisitsView">
             <div class="table-header-footer-title">{{dataSource.headerTitle}}</div>
 
             <ion-scroll direction="x" class="wide-as-needed header-scroll" delegate-handle="header" scrollbar-x ="false">
                 <button class="button table-header-item normal" ng-repeat="lesson in dataSource.lessons" ng-click="selectLesson(lesson)"
                         ng-class="{active: dataSource.activeLesson == lesson, wide : dataSource.activeLesson == lesson }">
-                    {{lesson.getDateString()}}
+                    {{lesson.getName()}}
                 </button>
             </ion-scroll>
         </div>
+
+
+        <div ng-if="!isVisitsView">
+            <div class="table-header-footer-title">{{dataSource.headerLabTitle}}</div>
+
+            <ion-scroll direction="x" class="wide-as-needed header-scroll" delegate-handle="header" scrollbar-x ="false">
+                <button class="button table-header-item normal" ng-repeat="lab in dataSource.labs">
+                    {{lab.getName()}}
+                </button>
+            </ion-scroll>
+        </div>
+
     </ion-header-bar>
 
     <ion-content class="no-padding">
@@ -83,7 +103,7 @@
             </div>
         </div>
 
-        <ion-scroll direction="x" class="wide-as-needed right-container"
+        <ion-scroll ng-if="isVisitsView"  direction="x" class="wide-as-needed right-container"
                     delegate-handle="table" on-scroll="onScrollTable()">
 
             <div ng-repeat="row in dataSource.activeSection.rows" class="table-row">
@@ -107,19 +127,41 @@
             </div>
         </ion-scroll>
 
+        <ion-scroll ng-if="!isVisitsView"  direction="x" class="wide-as-needed right-container"
+                    delegate-handle="table" on-scroll="onScrollTable()">
+
+            <div ng-repeat="row in dataSource.labsRows" class="table-row">
+                <div ng-repeat="item in row.items" class="table-row-item normal">
+
+                    <button class="button table-row-item normal">
+                        {{item.percentage}}
+                    </button>
+                </div>
+            </div>
+        </ion-scroll>
 
       </ion-content>
 
     <ion-footer-bar class="no-padding">
         <div class="table-header-footer-title">{{dataSource.footerTitle}}</div>
-        <ion-scroll direction="x" class="wide-as-needed footer-scroll" delegate-handle="footer"
+
+        <ion-scroll ng-if="isVisitsView" direction="x" class="wide-as-needed footer-scroll" delegate-handle="footer"
                     scrollbar-x ="false">
             <button class="button table-header-item normal" ng-repeat="lesson in dataSource.lessons" ng-model="lesson"
                     ng-class="{active: dataSource.activeLesson == lesson,wide : dataSource.activeLesson == lesson }"
-                    ng-click="editLessonNote(lesson)">
+                    ng-click="editNote(lesson)">
                 {{lesson.note}}
             </button>
         </ion-scroll>
+
+        <ion-scroll ng-if="!isVisitsView" direction="x" class="wide-as-needed footer-scroll" delegate-handle="footer"
+                    scrollbar-x ="false">
+            <button class="button table-header-item normal" ng-repeat="lab in dataSource.labs" ng-model="lesson"
+                    ng-click="editNote(lab)">
+                {{lab.note}}
+            </button>
+        </ion-scroll>
+
     </ion-footer-bar>
 </ion-view>
 
@@ -129,17 +171,17 @@
 
         <!-- Modal header bar -->
         <ion-header-bar class="bar-secondary">
-            <h1 class="title">Заметка от {{editLessonData.lesson.getDateString()}}</h1>
-            <button class="button button-clear button-positive" ng-click="closeEditLessonNote()">Отмена</button>
+            <h1 class="title">Заметка {{editNoteData.item.getName()}}</h1>
+            <button class="button button-clear button-positive" ng-click="closeNote()">Отмена</button>
         </ion-header-bar>
 
         <!-- Modal content area -->
         <ion-content>
 
-            <form ng-submit="saveLessonNote()">
+            <form ng-submit="saveNote()">
                 <div class="list">
                     <label class="item item-input">
-                        <input type="text" placeholder="Что записать?" ng-model="editLessonData.note">
+                        <input type="text" placeholder="Что записать?" ng-model="editNoteData.note">
                     </label>
                 </div>
                 <div class="padding">

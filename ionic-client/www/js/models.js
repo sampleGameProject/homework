@@ -49,40 +49,71 @@ function LabWork(name,task,stages,questions) {
 function LabWorkCompletion(labWork, startLesson,sheet) {
     this.labWork = labWork;
     this.startLesson = startLesson;
-
     this.studentLabWorkCompletions = [];
-
+    this.note = "";
     var completions = this.studentLabWorkCompletions;
 
     sheet.groups.forEach(function(group){
       group.students.forEach(function(student){
-            completions.push(new StudentLabWorkCompletion(student));
+            completions.push(new StudentLabWorkCompletion(student,labWork));
         });
     });
 }
 
-function StudentLabWorkCompletion(student) {
+LabWorkCompletion.prototype.constructor = LabWorkCompletion;
+
+LabWorkCompletion.prototype.getName = function(){
+    return this.labWork.name;
+};
+
+function StudentLabWorkCompletion(student,labWork) {
     this.student = student;
 
     this.labCompletionLesson = null;
 
-    this.labQuestionsCompletions = [];
+//    this.labQuestionsCompletions = [];
+
+    this.labStageCompletions = [];
+
+    for(var i = 0; i < labWork.stages.length; i++){
+        this.labStageCompletions.push(new LabStageCompletion(labWork.stages[i]));
+    }
 }
 
 StudentLabWorkCompletion.prototype.constructor = StudentLabWorkCompletion;
 
-StudentLabWorkCompletion.prototype.markQuestionAsAnswered = function (question,lesson) {
-    this.labQuestionsCompletions.push(new LabQuestionCompletion(question,lesson));
-};
+//StudentLabWorkCompletion.prototype.markQuestionAsAnswered = function (question,lesson) {
+//    this.labQuestionsCompletions.push(new LabQuestionCompletion(question,lesson));
+//};
 
 
 StudentLabWorkCompletion.prototype.markLabAsCompleted = function (lesson) {
     this.labCompletionLesson = lesson;
 };
 
-function LabQuestionCompletion(labWorkQuestion,lesson) {
-    this.labWorkQuestion = labWorkQuestion;
-    this.lesson = lesson;
+StudentLabWorkCompletion.prototype.getPercentageString = function(){
+    var completedStages = 0;
+
+    this.labStageCompletions.forEach(function(stageCompletion){
+        if(stageCompletion.done)
+            completedStages++;
+    });
+
+    var percent = (completedStages * 100/this.labStageCompletions.length);
+    percent = Math.round(percent);
+
+    return percent + " %";
+
+};
+
+//function LabQuestionCompletion(labWorkQuestion,lesson) {
+//    this.labWorkQuestion = labWorkQuestion;
+//    this.lesson = lesson;
+//}
+
+function LabStageCompletion(labWorkStage){
+    this.labWorkStage = labWorkStage;
+    this.done = false;
 }
 
 
@@ -105,7 +136,7 @@ function Lesson(date) {
 
 Lesson.prototype.constructor = Lesson;
 
-Lesson.prototype.getDateString = function(){
+Lesson.prototype.getName = function(){
     return this.date.getDate() + '.' + (this.date.getMonth() + 1) + '.' + this.date.getFullYear();
 };
 
@@ -137,13 +168,12 @@ Sheet.prototype.addLesson = function (date) {
             newLesson.visits.push(new Visit(currentGroup.students[j]));
         }
     }
-    
 
     this.lessons.push(newLesson);
 };
 
 Sheet.prototype.getTitle = function () {
-    var title = this.subject.name + " " + (this.isLection ? "Лекция" : "Практика") + " (";
+    var title = this.subject.name + " " + (this.isLection ? "Лекция" : "Лабораторные работы") + " (";
     
     var groups = this.groups;
     var length = groups.length;
@@ -180,6 +210,26 @@ Sheet.prototype.getStudentVisitsInfo = function (student) {
     return visitsInfo;
 };
 
+Sheet.prototype.getStudentLabsInfo = function(student){
+    var labsInfo = [];
+
+    var labsCount = this.labWorkCompletions.length;
+
+    for (var i = 0; i < labsCount; i++) {
+        var curLabWorkCompletion = this.labWorkCompletions[i];
+
+        for (var j = 0; j < curLabWorkCompletion.studentLabWorkCompletions.length; j++) {
+            var curStudentCompletion = curLabWorkCompletion.studentLabWorkCompletions[j];
+
+            if (curStudentCompletion.student == student) {
+                labsInfo.push({percentage : curStudentCompletion.getPercentageString()});
+            }
+        }
+    }
+
+    return labsInfo;
+};
+
 Sheet.prototype.getAvailableLabs = function () {
 
     var available = [];
@@ -205,48 +255,77 @@ Sheet.prototype.releaseLab = function (lab,lesson) {
 
 //#end region
 
+
 //#region demo
 
 function createDemo() {
 
     var subject1 = new Subject("ТРПО", [
         new LabWork("Лаб.№1 Иследование предметной области", "Исследовать заданную предметную область", [
+            new LabWorkStage("Ознакомиться с предметной областью"),
+            new LabWorkStage("Выявить основные проблемы"),
+            new LabWorkStage("Предложить способы решения")
+        ],[
             new LabWorkQuestion("Вопрос №1 на лаб №1"),
             new LabWorkQuestion("Вопрос №2 на лаб №1"),
             new LabWorkQuestion("Вопрос №3 на лаб №1"),
             new LabWorkQuestion("Вопрос №4 на лаб №1")
         ]),
         new LabWork("Лаб.№2 Сравнение программ-аналогов", "Сравнить 3 выбранных программы-аналога", [
+            new LabWorkStage("Найти 3 программы-аналога"),
+            new LabWorkStage("Сравнить преимущества и недостатки"),
+            new LabWorkStage("Сделать вывод - какие возможности этих программ можно использовать в проекте")
+        ], [
             new LabWorkQuestion("Вопрос №1 на лаб №2"),
             new LabWorkQuestion("Вопрос №2 на лаб №2"),
             new LabWorkQuestion("Вопрос №3 на лаб №2"),
             new LabWorkQuestion("Вопрос №4 на лаб №2")
         ]),
         new LabWork("Лаб.№3 Техническое задание", "Разработать техническое задание для проекта", [
+            new LabWorkStage("Составить техническое задание"),
+            new LabWorkStage("Общий объем более 3-х страниц"),
+            new LabWorkStage("Объем функциональных требований - не меньше 1 страницы")
+        ], [
             new LabWorkQuestion("Вопрос №1 на лаб №3"),
             new LabWorkQuestion("Вопрос №2 на лаб №3"),
             new LabWorkQuestion("Вопрос №3 на лаб №3"),
             new LabWorkQuestion("Вопрос №4 на лаб №3")
         ]),
         new LabWork("Лаб.№4 Модель данных", "Разработать модель данных для проекта", [
+            new LabWorkStage("Модель ERD"),
+            new LabWorkStage("Сущностей более 6"),
+            new LabWorkStage("Модель в 3 нормальной форме")
+        ], [
             new LabWorkQuestion("Вопрос №1 на лаб №4"),
             new LabWorkQuestion("Вопрос №2 на лаб №4"),
             new LabWorkQuestion("Вопрос №3 на лаб №4"),
             new LabWorkQuestion("Вопрос №4 на лаб №4")
         ]),
         new LabWork("Лаб.№5 SADT-диаграмма", "Построить SADT-диаграмму для проекта", [
+            new LabWorkStage("Уровней более 3"),
+            new LabWorkStage("Имена в нормальной форме"),
+            new LabWorkStage("Имена стрелок в нормальной форме")
+        ], [
             new LabWorkQuestion("Вопрос №1 на лаб №5"),
             new LabWorkQuestion("Вопрос №2 на лаб №5"),
             new LabWorkQuestion("Вопрос №3 на лаб №5"),
             new LabWorkQuestion("Вопрос №4 на лаб №5")
         ]),
         new LabWork("Лаб.№6 DFD-диаграмма", "Построить DFD-диаграмму для проекта", [
+            new LabWorkStage("Уровней более 3"),
+            new LabWorkStage("Имена в нормальной форме"),
+            new LabWorkStage("Имена стрелок в нормальной форме")
+        ], [
             new LabWorkQuestion("Вопрос №1 на лаб №6"),
             new LabWorkQuestion("Вопрос №2 на лаб №6"),
             new LabWorkQuestion("Вопрос №3 на лаб №6"),
             new LabWorkQuestion("Вопрос №4 на лаб №6")
         ]),
-        new LabWork("Лаб.№7 Архитектура ситстемы", "Выбрать подходящую архитектуру для проекта и обосновать выбор", [
+        new LabWork("Лаб.№7 Архитектура системы", "Выбрать подходящую архитектуру для проекта и обосновать выбор", [
+            new LabWorkStage("Ознакомится с популярными архитектурам ПО"),
+            new LabWorkStage("Выбрать подходящую архитектуру для проекта"),
+            new LabWorkStage("Обосновать выбор")
+        ], [
             new LabWorkQuestion("Вопрос №1 на лаб №7"),
             new LabWorkQuestion("Вопрос №2 на лаб №7"),
             new LabWorkQuestion("Вопрос №3 на лаб №7"),
@@ -313,12 +392,25 @@ function createDemo() {
     sheet2.addLesson(new Date("October 20, 2014 13:15:00"));
 
     sheet2.releaseLab(subject1.labWorks[0],sheet2.lessons[1]);
-//    sheet2.releaseLab(subject1.labWorks[1],sheet2.lessons[1]);
-//    sheet2.releaseLab(subject1.labWorks[2],sheet2.lessons[1]);
+    sheet2.releaseLab(subject1.labWorks[1],sheet2.lessons[1]);
+    sheet2.releaseLab(subject1.labWorks[2],sheet2.lessons[1]);
 //    sheet2.releaseLab(subject1.labWorks[3],sheet2.lessons[1]);
 //    sheet2.releaseLab(subject1.labWorks[4],sheet2.lessons[1]);
 //    sheet2.releaseLab(subject1.labWorks[5],sheet2.lessons[1]);
 //    sheet2.releaseLab(subject1.labWorks[6],sheet2.lessons[1]);
+
+    sheet2.labWorkCompletions[0].studentLabWorkCompletions[0].labStageCompletions[0].done = true;
+    sheet2.labWorkCompletions[0].studentLabWorkCompletions[0].labStageCompletions[1].done = true;
+
+    sheet2.labWorkCompletions[0].studentLabWorkCompletions[1].labStageCompletions[0].done = true;
+
+    sheet2.labWorkCompletions[0].studentLabWorkCompletions[4].labStageCompletions[0].done = true;
+
+    sheet2.labWorkCompletions[1].studentLabWorkCompletions[0].labStageCompletions[0].done = true;
+    sheet2.labWorkCompletions[1].studentLabWorkCompletions[0].labStageCompletions[1].done = true;
+
+    sheet2.labWorkCompletions[2].studentLabWorkCompletions[0].labStageCompletions[0].done = true;
+    sheet2.labWorkCompletions[2].studentLabWorkCompletions[0].labStageCompletions[1].done = true;
 
     var sheet3 = new Sheet(subject1, [group10po2], false);
 
@@ -403,14 +495,26 @@ SheetTableDataSource.prototype.init = function(){
 
     //init labs if it necessary
 
-    if(!this.sheet.isLection){ //it's practice
+    if(this.sheet.isLection)
+        return;
 
-        this.subheaders = [];
-        this.subheaders.push("Посещаемость");
+    //so it's practice
 
-        for(i = 0; i < this.sheet.labWorkCompletions.length; i++){
-            var labWorkCompletion = this.sheet.labWorkCompletions[i];
-            this.subheaders.push(labWorkCompletion.labWork.name);
+    this.headerLabTitle = "Группа / Лаб.работы";
+    this.labs = this.sheet.labWorkCompletions;
+
+    this.labsRows = [];
+
+    for (i = 0; i < groupsCount; i++) {
+
+        currentGroup = this.sheet.groups[i];
+
+        for (j = 0; j < currentGroup.students.length; j++) {
+
+            curStudent = currentGroup.students[j];
+            newRow = new Row("");
+            newRow.items = this.sheet.getStudentLabsInfo(curStudent);
+            this.labsRows.push(newRow);
         }
     }
 };
@@ -418,6 +522,95 @@ SheetTableDataSource.prototype.init = function(){
 SheetTableDataSource.prototype.addLesson = function(date){
     this.sheet.addLesson(date);
     this.init();
+};
+
+
+function DataSource(sheet){
+    this.sheet = sheet;
+    this.title = sheet.getTitle();
+
+    this.activeLesson = null;
+
+    this.headerRow = null;
+    this.footerRow = null;
+
+    if(sheet.isLection)
+    {
+        this.sections = [];
+
+    }
+    else //it's labs
+    {
+
+    }
+
+    this.update();
+}
+
+DataSource.prototype.constructor = DataSource;
+
+DataSource.prototype.update = function(){
+
+    //init header & footer
+
+    this.headerTitle = "Группа / Дата";
+    this.footerTitle = "Заметки";
+    this.lessons = this.sheet.lessons;
+
+    //init sections
+
+    var activeSectionIndex = this.sections.indexOf(this.activeSection);
+    if(activeSectionIndex == -1)
+        activeSectionIndex = 0;
+
+    this.sections = [];
+
+    var groupsCount = this.sheet.groups.length;
+
+    for (var i = 0; i < groupsCount; i++) {
+
+        var currentGroup = this.sheet.groups[i];
+        var newSection = new Section(currentGroup.name);
+
+        for (var j = 0; j < currentGroup.students.length; j++) {
+
+            var curStudent = currentGroup.students[j];
+            var title = curStudent.num + ". " + curStudent.name;
+            var newRow = new Row(title);
+
+            newRow.items = this.sheet.getStudentVisitsInfo(curStudent);
+            newSection.rows.push(newRow);
+        }
+
+        this.sections.push(newSection);
+    }
+
+    this.activeSection = this.sections[activeSectionIndex];
+
+    //init labs if it necessary
+
+    if(this.sheet.isLection)
+        return;
+
+    //so it's practice
+
+    this.headerLabTitle = "Группа / Лаб.работы";
+    this.labs = this.sheet.labWorkCompletions;
+
+    this.labsRows = [];
+
+    for (i = 0; i < groupsCount; i++) {
+
+        currentGroup = this.sheet.groups[i];
+
+        for (j = 0; j < currentGroup.students.length; j++) {
+
+            curStudent = currentGroup.students[j];
+            newRow = new Row("");
+            newRow.items = this.sheet.getStudentLabsInfo(curStudent);
+            this.labsRows.push(newRow);
+        }
+    }
 };
 
 //#end region
