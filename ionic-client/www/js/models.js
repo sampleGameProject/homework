@@ -4,7 +4,12 @@
 
 function Student(name) {
     this.name = name;
+    this.num = -1;
 }
+
+Student.prototype.getNameInList = function(){
+    return this.num + ". " + this.name;
+};
 
 function Group(name, students) {
     this.name = name;
@@ -222,7 +227,7 @@ Sheet.prototype.getStudentLabsInfo = function(student){
             var curStudentCompletion = curLabWorkCompletion.studentLabWorkCompletions[j];
 
             if (curStudentCompletion.student == student) {
-                labsInfo.push({percentage : curStudentCompletion.getPercentageString()});
+                labsInfo.push({completion : curStudentCompletion});
             }
         }
     }
@@ -443,89 +448,16 @@ function Section(title) {
 
 var counter = 1;
 
-function SheetTableDataSource(sheet) {
-
-    this.sheet = sheet;
-    this.title = sheet.getTitle();
-    this.sections = [];
-    this.activeLesson = null;
-
-    this.init();
+function extend(Child, Parent) {
+    var F = function() { };
+    F.prototype = Parent.prototype;
+    Child.prototype = new F();
+    Child.prototype.constructor = Child;
+    Child.superclass = Parent.prototype;
 }
 
-SheetTableDataSource.prototype.constructor = SheetTableDataSource;
 
-SheetTableDataSource.prototype.init = function(){
-
-    //init header & footer
-
-    this.headerTitle = "Группа / Дата";
-    this.footerTitle = "Заметки";
-    this.lessons = this.sheet.lessons;
-
-    //init sections
-
-    var activeSectionIndex = this.sections.indexOf(this.activeSection);
-    if(activeSectionIndex == -1)
-        activeSectionIndex = 0;
-
-    this.sections = [];
-
-    var groupsCount = this.sheet.groups.length;
-
-    for (var i = 0; i < groupsCount; i++) {
-
-        var currentGroup = this.sheet.groups[i];
-        var newSection = new Section(currentGroup.name);
-
-        for (var j = 0; j < currentGroup.students.length; j++) {
-
-            var curStudent = currentGroup.students[j];
-            var title = curStudent.num + ". " + curStudent.name;
-            var newRow = new Row(title);
-
-            newRow.items = this.sheet.getStudentVisitsInfo(curStudent);
-            newSection.rows.push(newRow);
-        }
-
-        this.sections.push(newSection);
-    }
-
-    this.activeSection = this.sections[activeSectionIndex];
-
-    //init labs if it necessary
-
-    if(this.sheet.isLection)
-        return;
-
-    //so it's practice
-
-    this.headerLabTitle = "Группа / Лаб.работы";
-    this.labs = this.sheet.labWorkCompletions;
-
-    this.labsRows = [];
-
-    for (i = 0; i < groupsCount; i++) {
-
-        currentGroup = this.sheet.groups[i];
-
-        for (j = 0; j < currentGroup.students.length; j++) {
-
-            curStudent = currentGroup.students[j];
-            newRow = new Row("");
-            newRow.items = this.sheet.getStudentLabsInfo(curStudent);
-            this.labsRows.push(newRow);
-        }
-    }
-};
-
-SheetTableDataSource.prototype.addLesson = function(date){
-    this.sheet.addLesson(date);
-    this.init();
-};
-
-
-function DataSource(sheet){
+function SheetDataSource(sheet){
     this.sheet = sheet;
     this.title = sheet.getTitle();
 
@@ -534,30 +466,56 @@ function DataSource(sheet){
     this.headerRow = null;
     this.footerRow = null;
 
-    if(sheet.isLection)
-    {
-        this.sections = [];
+    this.rows = null;
+}
 
-    }
-    else //it's labs
-    {
+SheetDataSource.prototype.constructor = SheetDataSource;
 
-    }
+SheetDataSource.prototype.update = function(){
+    console.log("update: override this function");
+};
 
+SheetDataSource.prototype.addLesson = function(date){
+    this.sheet.addLesson(date);
+    this.update();
+};
+
+SheetDataSource.prototype.selectLesson = function(lesson){
+    if(this.activeLesson == lesson)
+        this.activeLesson = null;
+    else
+        this.activeLesson = lesson;
+};
+
+SheetDataSource.prototype.isVisitsView = function(){
+    return true;
+};
+
+function LectionSheetDataSource(sheet){
+
+    SheetDataSource.call(this,sheet);
+
+    this.activeSection = null;
     this.update();
 }
 
-DataSource.prototype.constructor = DataSource;
+extend(LectionSheetDataSource,SheetDataSource);
 
-DataSource.prototype.update = function(){
+LectionSheetDataSource.prototype.update = function(){
 
     //init header & footer
 
-    this.headerTitle = "Группа / Дата";
-    this.footerTitle = "Заметки";
-    this.lessons = this.sheet.lessons;
+    this.headerRow = new Row("Группа / Дата");
+    this.footerRow = new Row("Заметки");
+
+    for(var i = 0; i < this.sheet.lessons.length; i++){
+        this.headerRow.items.push(this.sheet.lessons[i]);
+        this.footerRow.items.push(this.sheet.lessons[i]);
+    }
 
     //init sections
+
+    this.sections = [];
 
     var activeSectionIndex = this.sections.indexOf(this.activeSection);
     if(activeSectionIndex == -1)
@@ -567,7 +525,7 @@ DataSource.prototype.update = function(){
 
     var groupsCount = this.sheet.groups.length;
 
-    for (var i = 0; i < groupsCount; i++) {
+    for (i = 0; i < groupsCount; i++) {
 
         var currentGroup = this.sheet.groups[i];
         var newSection = new Section(currentGroup.name);
@@ -575,7 +533,7 @@ DataSource.prototype.update = function(){
         for (var j = 0; j < currentGroup.students.length; j++) {
 
             var curStudent = currentGroup.students[j];
-            var title = curStudent.num + ". " + curStudent.name;
+            var title = curStudent.getNameInList();
             var newRow = new Row(title);
 
             newRow.items = this.sheet.getStudentVisitsInfo(curStudent);
@@ -585,32 +543,101 @@ DataSource.prototype.update = function(){
         this.sections.push(newSection);
     }
 
-    this.activeSection = this.sections[activeSectionIndex];
-
-    //init labs if it necessary
-
-    if(this.sheet.isLection)
-        return;
-
-    //so it's practice
-
-    this.headerLabTitle = "Группа / Лаб.работы";
-    this.labs = this.sheet.labWorkCompletions;
-
-    this.labsRows = [];
-
-    for (i = 0; i < groupsCount; i++) {
-
-        currentGroup = this.sheet.groups[i];
-
-        for (j = 0; j < currentGroup.students.length; j++) {
-
-            curStudent = currentGroup.students[j];
-            newRow = new Row("");
-            newRow.items = this.sheet.getStudentLabsInfo(curStudent);
-            this.labsRows.push(newRow);
-        }
-    }
+    this.selectSection(this.sections[activeSectionIndex]);
 };
+
+LectionSheetDataSource.prototype.selectSection = function(section){
+    this.activeSection = section;
+    this.rows = this.activeSection.rows;
+};
+
+
+function LabSheetDataSource(sheet){
+
+    SheetDataSource.call(this,sheet);
+
+    this.update();
+}
+
+extend(LabSheetDataSource,SheetDataSource);
+
+
+LabSheetDataSource.prototype.update = function(){
+
+    var activeViewIndex = this.views.indexOf(this.activeView);
+    if(activeViewIndex == -1)
+        activeViewIndex = 0;
+
+    //init header & footer
+
+    var visitsHeader = new Row("Группа / Дата");
+    var labsHeader = new Row("Группа / Лаб. работы");
+
+    var visitsFooter = new Row("Заметки");
+    var labsFooter = new Row("Заметки");
+
+    for(var i = 0; i < this.sheet.lessons.length; i++){
+        visitsHeader.items.push(this.sheet.lessons[i]);
+        visitsFooter.items.push(this.sheet.lessons[i]);
+    }
+
+    for(i = 0; i < this.sheet.labWorkCompletions.length; i++){
+        labsHeader.items.push(this.sheet.labWorkCompletions[i]);
+        labsFooter.items.push(this.sheet.labWorkCompletions[i]);
+    }
+
+    var visitsRows = [];
+    var group = this.sheet.groups[0]; // в ведомости лабораторных работ всегда только одна группа, массив используется ПОКА для совместимости с ведомостью лекций
+
+    for (var j = 0; j < group.students.length; j++) {
+
+        var curStudent = group.students[j];
+        var title = curStudent.getNameInList();
+        var newRow = new Row(title);
+
+        newRow.items = this.sheet.getStudentVisitsInfo(curStudent);
+        visitsRows.push(newRow);
+    }
+
+    //init labs
+
+    var labsRows = [];
+
+    for (j = 0; j < group.students.length; j++) {
+
+        curStudent = group.students[j];
+        newRow = new Row(curStudent.getNameInList());
+        newRow.items = this.sheet.getStudentLabsInfo(curStudent);
+        labsRows.push(newRow);
+    }
+
+    // final init
+
+    this.views = [{
+        title: "Посещаемость",
+        header: visitsHeader,
+        footer: visitsFooter,
+        rows: visitsRows
+    },{
+        title: "Защита работ",
+        header: labsHeader,
+        footer: labsFooter,
+        rows: labsRows
+    }];
+
+    this.selectActiveView(this.views[activeViewIndex]);
+};
+
+LabSheetDataSource.prototype.selectActiveView = function(view){
+    this.activeView = view;
+    this.rows = this.activeView.rows;
+    this.footerRow = this.activeView.footer;
+    this.headerRow = this.activeView.header;
+};
+
+LabSheetDataSource.prototype.isVisitsView = function(){
+    return this.activeView == this.views[0];
+};
+
 
 //#end region

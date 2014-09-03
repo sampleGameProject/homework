@@ -61,33 +61,18 @@ angular.module('starter.controllers', [])
         var current = AppData.sheets[i];
 
         if(current.id == $stateParams.sheetId){
-            $scope.dataSource = new SheetTableDataSource(current);
+            $scope.dataSource = current.isLection ? new LectionSheetDataSource(current) : LabSheetDataSource(current);
             break;
         }
     }
 
     $scope.selectSection = function(section){
-        $scope.dataSource.activeSection = section;
+        $scope.dataSource.selectSection(section);
     };
 
-    $scope.selectLesson = function(lesson) {
-        if($scope.dataSource.activeLesson == lesson)
-        {
-            $scope.dataSource.activeLesson = null;
+    $scope.selectLesson = $scope.dataSource.selectLesson;
 
-//            var position = table.getScrollPosition();
-//            table.scrollTo(position.left - 108, position.top, true);
-        }
-
-        else
-        {
-            $scope.dataSource.activeLesson = lesson;
-
-//            var position = table.getScrollPosition();
-//            table.scrollTo(position.left + 108, position.top, true);
-        }
-
-    };
+    $scope.isVisitsView = $scope.dataSource.isVisitsView;
 
     $scope.selectVisitType = function(visit,type){
         visit.type = type;
@@ -115,8 +100,8 @@ angular.module('starter.controllers', [])
         footer.scrollTo(pos.left,pos.top,false);
     };
 
-    $scope.editLessonData = {
-        lesson : null,
+    $scope.editNoteData = {
+        item : null,
         note : null
     };
 
@@ -128,26 +113,26 @@ angular.module('starter.controllers', [])
     });
 
     // Open
-    $scope.editLessonNote = function(lesson) {
-        $scope.editLessonData.lesson = lesson;
-        $scope.editLessonData.note = lesson.note.slice(0,lesson.note.length);
+    $scope.editNote = function(item) {
+        $scope.editNoteData.item = item;
+        $scope.editNoteData.note = item.note.slice(0,item.note.length);
 
         $scope.taskModal.show();
     };
 
     // Close
-    $scope.closeEditLessonNote = function() {
-        $scope.editLessonData.lesson = null;
-        $scope.editLessonData.note = null;
+    $scope.closeNote = function() {
+        $scope.editNoteData.item = null;
+        $scope.editNoteData.note = null;
 
         $scope.taskModal.hide();
     };
 
     // Called when the form is submitted
-    $scope.saveLessonNote = function() {
-        $scope.editLessonData.lesson.note = $scope.editLessonData.note;
-        $scope.editLessonData.lesson = null;
-        $scope.editLessonData.note = null;
+    $scope.saveNote = function() {
+        $scope.editNoteData.item.note = $scope.editNoteData.note;
+        $scope.editNoteData.item = null;
+        $scope.editNoteData.note = null;
 
         $scope.taskModal.hide();
     };
