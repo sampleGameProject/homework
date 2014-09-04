@@ -456,6 +456,7 @@ function extend(Child, Parent) {
     Child.superclass = Parent.prototype;
 }
 
+//SheetDataSource
 
 function SheetDataSource(sheet){
     this.sheet = sheet;
@@ -490,6 +491,8 @@ SheetDataSource.prototype.selectLesson = function(lesson){
 SheetDataSource.prototype.isVisitsView = function(){
     return true;
 };
+
+//LectionSheetDataSource
 
 function LectionSheetDataSource(sheet){
 
@@ -546,27 +549,35 @@ LectionSheetDataSource.prototype.update = function(){
     this.selectSection(this.sections[activeSectionIndex]);
 };
 
+
+
 LectionSheetDataSource.prototype.selectSection = function(section){
     this.activeSection = section;
     this.rows = this.activeSection.rows;
 };
 
+// LabSheetDataSource
 
 function LabSheetDataSource(sheet){
 
     SheetDataSource.call(this,sheet);
-
     this.update();
 }
 
 extend(LabSheetDataSource,SheetDataSource);
 
 
+
 LabSheetDataSource.prototype.update = function(){
 
-    var activeViewIndex = this.views.indexOf(this.activeView);
-    if(activeViewIndex == -1)
-        activeViewIndex = 0;
+    var activeViewIndex = 0;
+
+    if(this.views != null){
+        activeViewIndex = this.views.indexOf(this.activeView);
+        if(activeViewIndex == -1)
+            activeViewIndex = 0;
+    }
+
 
     //init header & footer
 

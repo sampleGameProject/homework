@@ -8,17 +8,20 @@
             </a>
             <i class="ion-clipboard custom-icon"></i>
 
-            <a ng-if="dataSource.sections.length > 1" class="header-title button button-clear" ng-click="toggleSpinner()">
+            <div class="label padding">
                 {{dataSource.title}}
+            </div>
+
+            <a ng-if="dataSource.sections.length > 1 && dataSource.sheet.isLection" class="header-title button button-clear" ng-click="toggleSpinner()">
                 {{dataSource.activeSection.title}}
                 <i class="ion-android-dropdown"> </i>
             </a>
 
-            <div ng-if="dataSource.sections.length == 1" class="label padding">
-                {{dataSource.title}}
+            <div ng-if="dataSource.sections.length == 1 && dataSource.sheet.isLection" class="label padding">
+                {{dataSource.activeSection.title}}
             </div>
 
-            <a ng-if="!dataSource.sheet.isLection" class="header-title button button-clear" ng-click="toggleViewsSpinner()">
+            <a ng-if="!dataSource.sheet.isLection" class="header-title button button-clear" ng-click="toggleSpinner()">
                 {{dataSource.activeView.title}}
                 <i class="ion-android-dropdown"> </i>
             </a>
@@ -28,19 +31,17 @@
         <h1 class="title"></h1>
 
         <div class="buttons">
-            <button class="button  button-clear" ng-click="addLesson()">
+            <button ng-if="isVisitsView()" class="button button-clear" ng-click="addClick()">
                 <i class="ion-android-add right-bar-icon"></i>
             </button>
-
-            <button ng-if="!dataSource.sheet.isLection" class="button button-clear android-more-button"
-                    ng-click="toggleLabsSpinner()">
-                <i class="ion-android-more right-bar-icon"></i>
+            <button ng-if="!isVisitsView()" class="button" ng-click="addClick()">
+                <i class="ion-android-add right-bar-icon"></i>
             </button>
         </div>
 
     </ion-nav-bar>
 
-    <div ng-if="showSpinner && dataSource.sections.length > 1" class="animate-if spinner-content">
+    <div ng-if="showSpinner && dataSource.sections.length > 1 && dataSource.sheet.isLection" class="animate-if spinner-content">
         <ion-radio ng-repeat="section in dataSource.sections"
             ng-value="section"
             ng-model="dataSource.activeSection"
@@ -50,24 +51,15 @@
         </ion-radio>
     </div>
 
-    <!--<div ng-if="!dataSource.sheet.isLection" class="animate-if spinner-content">-->
-        <!--<ion-radio ng-repeat="view in views"-->
-                   <!--ng-value="view"-->
-                   <!--ng-model="dataSource.activeView"-->
-                   <!--ng-change="activeViewChanged()"-->
-                   <!--name="section-side">-->
-            <!--{{ view.title }}-->
-        <!--</ion-radio>-->
-    <!--</div>-->
-
-
-    <!--<div ng-if="showLabsSpinner" class="animate-if lab-spinner-content">-->
-        <!--<ion-list>-->
-            <!--<ion-item ng-repeat="lab in dataSource.sheet.getAvailableLabs()" ng-click="releaseLab(lab)">-->
-                <!--{{lab.name}}-->
-            <!--</ion-item>-->
-        <!--</ion-list>-->
-    <!--</div>-->
+    <div ng-if="showSpinner && !dataSource.sheet.isLection" class="animate-if spinner-content">
+        <ion-radio ng-repeat="view in dataSource.views"
+                   ng-value="view"
+                   ng-model="dataSource.activeView"
+                   ng-change="toggleSpinner()"
+                   name="section-side">
+            {{ view.title }}
+        </ion-radio>
+    </div>
 
     <ion-header-bar class="bar-subheader no-padding">
 
@@ -93,7 +85,7 @@
     <ion-content class="no-padding">
 
         <div class="left-container">
-            <div ng-repeat="row in dataSource.activeSection.rows" class="table-row-name-item">
+            <div ng-repeat="row in dataSource.rows" class="table-row-name-item">
                 <span class="table-row-name-item">{{row.title}}</span>
             </div>
         </div>
@@ -101,7 +93,7 @@
         <ion-scroll ng-if="isVisitsView()"  direction="x" class="wide-as-needed right-container"
                     delegate-handle="table" on-scroll="onScrollTable()">
 
-            <div ng-repeat="row in dataSource.activeSection.rows" class="table-row">
+            <div ng-repeat="row in dataSource.rows" class="table-row">
                 <div ng-repeat="item in row.items" class="table-row-item normal"
                      ng-class="{active: dataSource.activeLesson == item.lesson, wide : dataSource.activeLesson == item.lesson }">
 
@@ -125,7 +117,7 @@
         <ion-scroll ng-if="!isVisitsView()"  direction="x" class="wide-as-needed right-container"
                     delegate-handle="table" on-scroll="onScrollTable()">
 
-            <div ng-repeat="row in dataSource.labsRows" class="table-row">
+            <div ng-repeat="row in dataSource.rows" class="table-row">
                 <div ng-repeat="item in row.items" class="table-row-item normal">
 
                     <button class="button table-row-item normal">

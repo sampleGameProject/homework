@@ -61,7 +61,7 @@ angular.module('starter.controllers', [])
         var current = AppData.sheets[i];
 
         if(current.id == $stateParams.sheetId){
-            $scope.dataSource = current.isLection ? new LectionSheetDataSource(current) : LabSheetDataSource(current);
+            $scope.dataSource = current.isLection ? new LectionSheetDataSource(current) : new LabSheetDataSource(current);
             break;
         }
     }
@@ -70,9 +70,13 @@ angular.module('starter.controllers', [])
         $scope.dataSource.selectSection(section);
     };
 
-    $scope.selectLesson = $scope.dataSource.selectLesson;
+    $scope.selectLesson = function(lesson){
+        $scope.dataSource.selectLesson(lesson);
+    };
 
-    $scope.isVisitsView = $scope.dataSource.isVisitsView;
+    $scope.isVisitsView =  function(view){
+        return $scope.dataSource.isVisitsView(view);
+    };
 
     $scope.selectVisitType = function(visit,type){
         visit.type = type;
@@ -88,7 +92,14 @@ angular.module('starter.controllers', [])
 
     $scope.toggleSpinner = function(){
         $scope.showSpinner = !$scope.showSpinner;
+
+//        if(!$scope.showSpinner)
+//            $scope.dataSource.selectSection($scope.dataSource.activeSection);
+
+          if(!$scope.showSpinner)
+            $scope.dataSource.selectActiveView($scope.dataSource.activeView);
     };
+
 
     var header = $ionicScrollDelegate.$getByHandle("header");
     var footer = $ionicScrollDelegate.$getByHandle("footer");
