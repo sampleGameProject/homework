@@ -61,7 +61,11 @@ angular.module('starter.controllers', [])
         var current = AppData.sheets[i];
 
         if(current.id == $stateParams.sheetId){
-            $scope.dataSource = current.isLection ? new LectionSheetDataSource(current) : new LabSheetDataSource(current);
+            $scope.dataSource = current.isLection ?
+                new LectionSheetDataSource(current,
+                    function(){$scope.dataSource.selectSection($scope.dataSource.activeSection);}) :
+                new LabSheetDataSource(current,
+                    function(){$scope.dataSource.selectActiveView($scope.dataSource.activeView);});
             break;
         }
     }
@@ -74,8 +78,8 @@ angular.module('starter.controllers', [])
         $scope.dataSource.selectLesson(lesson);
     };
 
-    $scope.isVisitsView =  function(view){
-        return $scope.dataSource.isVisitsView(view);
+    $scope.isVisitsView =  function(){
+        return $scope.dataSource.isVisitsView();
     };
 
     $scope.selectVisitType = function(visit,type){
@@ -93,11 +97,8 @@ angular.module('starter.controllers', [])
     $scope.toggleSpinner = function(){
         $scope.showSpinner = !$scope.showSpinner;
 
-//        if(!$scope.showSpinner)
-//            $scope.dataSource.selectSection($scope.dataSource.activeSection);
-
           if(!$scope.showSpinner)
-            $scope.dataSource.selectActiveView($scope.dataSource.activeView);
+            $scope.dataSource.onHideSpinner();
     };
 
 
@@ -118,6 +119,20 @@ angular.module('starter.controllers', [])
 
     $ionicModal.fromTemplateUrl('edit-lesson-note.html', function(modal) {
         $scope.taskModal = modal;
+    }, {
+        scope: $scope,
+        animation: 'slide-in-up'
+    });
+
+    $ionicModal.fromTemplateUrl('new-lesson.html', function(modal) {
+        $scope.newLessonModal = modal;
+    }, {
+        scope: $scope,
+        animation: 'slide-in-up'
+    });
+
+    $ionicModal.fromTemplateUrl('new-work.html', function(modal) {
+        $scope.newWorkModal = modal;
     }, {
         scope: $scope,
         animation: 'slide-in-up'
@@ -148,10 +163,20 @@ angular.module('starter.controllers', [])
         $scope.taskModal.hide();
     };
 
-    $scope.addLesson = function(){
-        $scope.dataSource.addLesson(new Date(Date.now()));
-        var position = table.getScrollPosition();
-        table.scrollTo(position.left + 100, position.top, true);
+    $scope.addPressed = function(){
+
+        if($scope.isVisitsView())
+        {
+            $scope.newLessonModal.show();
+        }
+        else
+        {
+            $scope.newWorkModal.show();
+        }
+//
+//        $scope.dataSource.addLesson(new Date(Date.now()));
+//        var position = table.getScrollPosition();
+//        table.scrollTo(position.left + 100, position.top, true);
     };
 
 

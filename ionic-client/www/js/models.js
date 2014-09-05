@@ -458,7 +458,7 @@ function extend(Child, Parent) {
 
 //SheetDataSource
 
-function SheetDataSource(sheet){
+function SheetDataSource(sheet, onHideSpinner){
     this.sheet = sheet;
     this.title = sheet.getTitle();
 
@@ -468,6 +468,8 @@ function SheetDataSource(sheet){
     this.footerRow = null;
 
     this.rows = null;
+
+    this.onHideSpinner = onHideSpinner;
 }
 
 SheetDataSource.prototype.constructor = SheetDataSource;
@@ -494,9 +496,9 @@ SheetDataSource.prototype.isVisitsView = function(){
 
 //LectionSheetDataSource
 
-function LectionSheetDataSource(sheet){
+function LectionSheetDataSource(sheet, onHideSpinner){
 
-    SheetDataSource.call(this,sheet);
+    SheetDataSource.call(this,sheet, onHideSpinner);
 
     this.activeSection = null;
     this.update();
@@ -558,9 +560,9 @@ LectionSheetDataSource.prototype.selectSection = function(section){
 
 // LabSheetDataSource
 
-function LabSheetDataSource(sheet){
+function LabSheetDataSource(sheet, onHideSpinner){
 
-    SheetDataSource.call(this,sheet);
+    SheetDataSource.call(this,sheet, onHideSpinner);
     this.update();
 }
 

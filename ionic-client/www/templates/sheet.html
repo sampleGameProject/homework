@@ -31,10 +31,7 @@
         <h1 class="title"></h1>
 
         <div class="buttons">
-            <button ng-if="isVisitsView()" class="button button-clear" ng-click="addClick()">
-                <i class="ion-android-add right-bar-icon"></i>
-            </button>
-            <button ng-if="!isVisitsView()" class="button" ng-click="addClick()">
+            <button class="button button-clear" ng-click="addPressed()">
                 <i class="ion-android-add right-bar-icon"></i>
             </button>
         </div>
@@ -183,13 +180,28 @@
 </script>
 
 
-<script id="my-modal.html" type="text/ng-template">
+<script id="new-lesson.html" type="text/ng-template">
     <ion-modal-view>
         <ion-header-bar class="bar-positive" align-title="left">
             <h1 class="title">Добавить занятие</h1>
         </ion-header-bar>
         <ion-content>
-            Hello!
+            Hello lesson!
+            <label class="item item-input">
+                <span class="input-label">Date</span>
+                <input type="date">
+            </label>
+        </ion-content>
+    </ion-modal-view>
+</script>
+
+<script id="new-work.html" type="text/ng-template">
+    <ion-modal-view>
+        <ion-header-bar class="bar-positive" align-title="left">
+            <h1 class="title">Выдать работу</h1>
+        </ion-header-bar>
+        <ion-content>
+            Hello work!
             <label class="item item-input">
                 <span class="input-label">Date</span>
                 <input type="date">
