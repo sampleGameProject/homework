@@ -142,7 +142,11 @@ function Lesson(date) {
 Lesson.prototype.constructor = Lesson;
 
 Lesson.prototype.getName = function(){
-    return this.date.getDate() + '.' + (this.date.getMonth() + 1) + '.' + this.date.getFullYear();
+    return this.date.getShort();
+};
+
+Date.prototype.getShort = function(){
+    return this.getDate() + '.' + (this.getMonth() + 1) + '.' + this.getFullYear();
 };
 
 function Sheet(subject, groups, isLection) {
@@ -423,9 +427,14 @@ function createDemo() {
     sheet3.addLesson(new Date("October 17, 2014 15:15:00"));
     sheet3.addLesson(new Date("October 20, 2014 15:15:00"));
 
+
+    var subject2 = new Subject("Методы и средства защиты информации",[]);
+
+    var sheet4 = new Sheet(subject2,[group10po1],true);
+
     return {
-        sheets : [sheet1, sheet2, sheet3],
-        subjects : [subject1],
+        sheets : [sheet1, sheet2, sheet3,sheet4],
+        subjects : [subject1,subject2],
         profile: {
             name: "testProfile"
         }
@@ -468,7 +477,6 @@ function SheetDataSource(sheet){
     this.footerRow = null;
 
     this.rows = null;
-
 }
 
 SheetDataSource.prototype.constructor = SheetDataSource;
@@ -590,8 +598,8 @@ LabSheetDataSource.prototype.update = function(){
 
     //init header & footer
 
-    var visitsHeader = new Row("Группа / Дата");
-    var labsHeader = new Row("Группа / Лаб. работы");
+    var visitsHeader = new Row("Дата");
+    var labsHeader = new Row("Лаб. работы");
 
     var visitsFooter = new Row("Заметки");
     var labsFooter = new Row("Заметки");

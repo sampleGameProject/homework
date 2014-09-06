@@ -53,16 +53,6 @@ angular.module('starter', ['ionic', 'starter.controllers'])
             controller: 'SheetController'
         });
 
-//        .state('app.sheet', {
-//            url: "/sheet/:sheetId",
-//            views: {
-//                'menuContent' :{
-//                    templateUrl: "templates/sheet.html",
-//                    controller:"SheetController"
-//                }
-//            }
-//        })
-//
 //            .state('app.subject', {
 //                url: "/subject/:subjectId",
 //                views: {

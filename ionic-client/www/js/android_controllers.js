@@ -2,7 +2,7 @@
  * Created by admin on 25.08.2014.
  */
 
-angular.module('starter.controllers', [])
+angular.module('starter.controllers', ['pickadate'])
 
 .controller('LoginController',function($scope,$state){
     console.log("test LoginController");
@@ -54,7 +54,7 @@ angular.module('starter.controllers', [])
 })
 
 .controller('SheetController', function($scope,AppData, $stateParams,
-    $ionicNavBarDelegate, $ionicScrollDelegate,$ionicModal) {
+    $ionicNavBarDelegate, $ionicScrollDelegate,$ionicModal,pickadateUtils) {
     console.log("test SheetController");
 
     var sheet = AppData.getSheetById($stateParams.sheetId);
@@ -80,8 +80,6 @@ angular.module('starter.controllers', [])
     $scope.goBack = function() {
         $ionicNavBarDelegate.back();
     };
-
-
 
     var header = $ionicScrollDelegate.$getByHandle("header");
     var footer = $ionicScrollDelegate.$getByHandle("footer");
@@ -148,30 +146,41 @@ angular.module('starter.controllers', [])
 
         if($scope.isVisitsView())
         {
-            $scope.newLessonModal.show();
+            $scope.opendateModal();
         }
         else
         {
             $scope.newWorkModal.show();
         }
-//
-//        $scope.dataSource.addLesson(new Date(Date.now()));
-//        var position = table.getScrollPosition();
-//        table.scrollTo(position.left + 100, position.top, true);
     };
 
-
-    $scope.showLabsSpinner = false;
-
-    $scope.toggleLabsSpinner = function(){
-        $scope.showLabsSpinner = !$scope.showLabsSpinner;
-    };
 
     $scope.releaseLab = function(lab){
-        $scope.showLabsSpinner = false;
         $scope.dataSource.sheet.releaseLab(lab);
         $scope.dataSource.init();
-    }
+    };
+
+    $ionicModal.fromTemplateUrl('datemodal.html',
+        function(modal) {
+            $scope.datemodal = modal;
+        },
+        {
+            scope: $scope,
+            animation: 'slide-in-up'
+        }
+    );
+
+    $scope.opendateModal = function() {
+        $scope.newLessonDate = new Date();
+        $scope.datemodal.show();
+    };
+    $scope.closedateModal = function(model) {
+        $scope.dataSource.addLesson(pickadateUtils.stringToDate(model));
+        $scope.datemodal.hide();
+
+        var position = table.getScrollPosition();
+        table.scrollTo(position.left + 100, position.top, true);
+    };
 })
 
 .controller('SubjectController',function($scope, AppData, $stateParams){

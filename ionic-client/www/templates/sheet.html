@@ -16,7 +16,6 @@
                 {{spinner.selected.title}}
                 <i class="ion-android-dropdown"> </i>
             </a>
-
         </div>
 
         <h1 class="title"></h1>
@@ -126,6 +125,7 @@
         </ion-scroll>
 
     </ion-footer-bar>
+
 </ion-view>
 
 <script id="edit-lesson-note.html" type="text/ng-template">
@@ -158,22 +158,6 @@
 
 </script>
 
-
-<script id="new-lesson.html" type="text/ng-template">
-    <ion-modal-view>
-        <ion-header-bar class="bar-positive" align-title="left">
-            <h1 class="title">Добавить занятие</h1>
-        </ion-header-bar>
-        <ion-content>
-            Hello lesson!
-            <label class="item item-input">
-                <span class="input-label">Date</span>
-                <input type="date">
-            </label>
-        </ion-content>
-    </ion-modal-view>
-</script>
-
 <script id="new-work.html" type="text/ng-template">
     <ion-modal-view>
         <ion-header-bar class="bar-positive" align-title="left">
@@ -187,4 +171,24 @@
             </label>
         </ion-content>
     </ion-modal-view>
+</script>
+
+<script id="datemodal.html" type="text/ng-template">
+    <div class="modal">
+
+    <ion-header-bar class="bar-positive" align-title="left">
+            <h1 class="title">Добавить занятие</h1>
+    </ion-header-bar>
+
+    <ion-content has-header="true">
+        <div class="padding">
+                <div pickadate ng-model="newLessonDate"></div>
+        </div>
+
+        <div>
+            <button class="button button-full button-balanced" ng-click="closedateModal(newLessonDate)">Choice</button>
+        </div>
+
+    </ion-content>
+    </div>
 </script>
