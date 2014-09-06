@@ -57,26 +57,15 @@ angular.module('starter.controllers', [])
     $ionicNavBarDelegate, $ionicScrollDelegate,$ionicModal) {
     console.log("test SheetController");
 
-    for(var i = 0; i < AppData.sheets.length; i++){
-        var current = AppData.sheets[i];
+    var sheet = AppData.getSheetById($stateParams.sheetId);
 
-        if(current.id == $stateParams.sheetId){
-            $scope.dataSource = current.isLection ?
-                new LectionSheetDataSource(current,
-                    function(){$scope.dataSource.selectSection($scope.dataSource.activeSection);}) :
-                new LabSheetDataSource(current,
-                    function(){$scope.dataSource.selectActiveView($scope.dataSource.activeView);});
-            break;
-        }
+    if(sheet == null){
+        console.log("Can't find sheet with id : " + $stateParams.sheetId);
+        return;
     }
 
-    $scope.selectSection = function(section){
-        $scope.dataSource.selectSection(section);
-    };
-
-    $scope.selectLesson = function(lesson){
-        $scope.dataSource.selectLesson(lesson);
-    };
+    $scope.dataSource = sheet.isLection ? new LectionSheetDataSource(sheet) : new LabSheetDataSource(sheet);
+    $scope.spinner = $scope.dataSource.getSpinner();
 
     $scope.isVisitsView =  function(){
         return $scope.dataSource.isVisitsView();
@@ -92,14 +81,6 @@ angular.module('starter.controllers', [])
         $ionicNavBarDelegate.back();
     };
 
-    $scope.showSpinner = false;
-
-    $scope.toggleSpinner = function(){
-        $scope.showSpinner = !$scope.showSpinner;
-
-          if(!$scope.showSpinner)
-            $scope.dataSource.onHideSpinner();
-    };
 
 
     var header = $ionicScrollDelegate.$getByHandle("header");

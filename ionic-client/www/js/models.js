@@ -458,7 +458,7 @@ function extend(Child, Parent) {
 
 //SheetDataSource
 
-function SheetDataSource(sheet, onHideSpinner){
+function SheetDataSource(sheet){
     this.sheet = sheet;
     this.title = sheet.getTitle();
 
@@ -469,7 +469,6 @@ function SheetDataSource(sheet, onHideSpinner){
 
     this.rows = null;
 
-    this.onHideSpinner = onHideSpinner;
 }
 
 SheetDataSource.prototype.constructor = SheetDataSource;
@@ -496,9 +495,9 @@ SheetDataSource.prototype.isVisitsView = function(){
 
 //LectionSheetDataSource
 
-function LectionSheetDataSource(sheet, onHideSpinner){
+function LectionSheetDataSource(sheet){
 
-    SheetDataSource.call(this,sheet, onHideSpinner);
+    SheetDataSource.call(this,sheet);
 
     this.activeSection = null;
     this.update();
@@ -551,18 +550,26 @@ LectionSheetDataSource.prototype.update = function(){
     this.selectSection(this.sections[activeSectionIndex]);
 };
 
-
-
 LectionSheetDataSource.prototype.selectSection = function(section){
     this.activeSection = section;
     this.rows = this.activeSection.rows;
 };
 
+
+LectionSheetDataSource.prototype.getSpinner = function(){
+
+    var self = this;
+
+    return new Spinner(this.sections,function(section){
+        self.selectSection(section);
+    });
+};
+
 // LabSheetDataSource
 
-function LabSheetDataSource(sheet, onHideSpinner){
+function LabSheetDataSource(sheet){
 
-    SheetDataSource.call(this,sheet, onHideSpinner);
+    SheetDataSource.call(this,sheet);
     this.update();
 }
 
@@ -648,9 +655,36 @@ LabSheetDataSource.prototype.selectActiveView = function(view){
     this.headerRow = this.activeView.header;
 };
 
+LabSheetDataSource.prototype.getSpinner = function(){
+
+    var self = this;
+
+    return new Spinner(this.views,function(view) {
+        self.selectActiveView(view);
+    });
+};
+
 LabSheetDataSource.prototype.isVisitsView = function(){
     return this.activeView == this.views[0];
 };
 
+
+function Spinner(items,onSelectItem){
+    this.items = items;
+    this.onSelectItem = onSelectItem;
+    this.show = false;
+
+    this.selectItem(this.items[0]);
+}
+
+Spinner.prototype.toggle = function(){
+    this.show = !this.show;
+};
+
+Spinner.prototype.selectItem = function(item){
+    this.selected = item;
+    this.show = false;
+    this.onSelectItem(item);
+};
 
 //#end region

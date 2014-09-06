@@ -12,17 +12,8 @@
                 {{dataSource.title}}
             </div>
 
-            <a ng-if="dataSource.sections.length > 1 && dataSource.sheet.isLection" class="header-title button button-clear" ng-click="toggleSpinner()">
-                {{dataSource.activeSection.title}}
-                <i class="ion-android-dropdown"> </i>
-            </a>
-
-            <div ng-if="dataSource.sections.length == 1 && dataSource.sheet.isLection" class="label padding">
-                {{dataSource.activeSection.title}}
-            </div>
-
-            <a ng-if="!dataSource.sheet.isLection" class="header-title button button-clear" ng-click="toggleSpinner()">
-                {{dataSource.activeView.title}}
+            <a ng-if="spinner.items.length > 1" class="header-title button button-clear" ng-click="spinner.toggle()">
+                {{spinner.selected.title}}
                 <i class="ion-android-dropdown"> </i>
             </a>
 
@@ -38,24 +29,12 @@
 
     </ion-nav-bar>
 
-    <div ng-if="showSpinner && dataSource.sections.length > 1 && dataSource.sheet.isLection" class="animate-if spinner-content">
-        <ion-radio ng-repeat="section in dataSource.sections"
-            ng-value="section"
-            ng-model="dataSource.activeSection"
-            ng-change="toggleSpinner()"
-            name="section-side">
-            {{ section.title }}
-        </ion-radio>
-    </div>
-
-    <div ng-if="showSpinner && !dataSource.sheet.isLection" class="animate-if spinner-content">
-        <ion-radio ng-repeat="view in dataSource.views"
-                   ng-value="view"
-                   ng-model="dataSource.activeView"
-                   ng-change="toggleSpinner()"
-                   name="section-side">
-            {{ view.title }}
-        </ion-radio>
+    <div ng-if="spinner.show" class="animate-if spinner-content">
+        <ion-list>
+            <ion-item ng-repeat="item in spinner.items" ng-click="spinner.selectItem(item)">
+                {{ item.title }}
+            </ion-item>
+        </ion-list>
     </div>
 
     <ion-header-bar class="bar-subheader no-padding">

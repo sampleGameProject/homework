@@ -12,6 +12,17 @@ angular.module('starter', ['ionic', 'starter.controllers'])
     this.profile = demo.profile;
 
     console.log("init AppData");
+
+    this.getSheetById = function(id){
+        for(var i = 0; i < this.sheets.length; i++){
+            var current = this.sheets[i];
+
+            if(current.id == id){
+                return current;
+            }
+        }
+        return null;
+    };
 })
 
 
